@@ -1,0 +1,11 @@
+{
+	"S3InboundPermission": {
+		"Type": "AWS::Lambda::Permission",
+		"DependsOn": "LambdaNameGet",
+		"Properties": {
+			"Action": "lambda:InvokeFunction",
+			"FunctionName": { "Ref": "LambdaNameGet" },
+			"Principal": "s3.amazonaws.com"
+		}
+	}
+}

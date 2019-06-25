@@ -1,0 +1,20 @@
+{
+	"CodeBuildLambdaNotificationRole": {
+		"Type": "AWS::IAM::Role",
+		"Properties": {
+			"RoleName": "0x4447-answering-mashine-notification-codebuild",
+			"AssumeRolePolicyDocument": {
+				"Version": "2012-10-17",
+				"Statement": [
+					{
+						"Effect": "Allow",
+						"Principal": {
+							"Service": "codebuild.amazonaws.com"
+						},
+						"Action": "sts:AssumeRole"
+					}
+				]
+			}
+		}
+	}
+}

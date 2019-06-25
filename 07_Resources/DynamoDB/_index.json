@@ -1,0 +1,35 @@
+{
+	"DDBData": {
+		"Type": "AWS::DynamoDB::Table",
+		"Properties": {
+			"TableName": "answering_mashine",
+			"AttributeDefinitions": [
+				{
+					"AttributeName": "id",
+					"AttributeType": "S"
+				},
+				{
+					"AttributeName": "type",
+					"AttributeType": "S"
+				}
+			],
+			"KeySchema": [
+				{
+					"AttributeName": "id",
+					"KeyType": "HASH"
+				},
+				{
+					"AttributeName": "type",
+					"KeyType": "RANGE"
+				}
+			],
+			"ProvisionedThroughput": {
+				"ReadCapacityUnits": 1,
+				"WriteCapacityUnits": 1
+			},
+			"StreamSpecification": {
+				"StreamViewType": "NEW_AND_OLD_IMAGES"
+			}
+		}
+	}
+}

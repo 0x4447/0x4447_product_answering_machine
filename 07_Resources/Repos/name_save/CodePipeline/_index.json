@@ -1,0 +1,65 @@
+{
+	"CodePipelineLambdaNameSave": {
+		"Type": "AWS::CodePipeline::Pipeline",
+		"Properties": {
+			"Name": "0x4447-answering-mashine-name_save",
+			"ArtifactStore": {
+				"Location": { "Ref": "CodePipelineBucketName" },
+				"Type": "S3"
+			},
+			"RoleArn": { "Fn::GetAtt": ["PipelineLambdaNameSaveRole", "Arn"] },
+			"Stages": [
+				{
+					"Name": "Get",
+					"Actions": [
+						{
+							"Name": "Material",
+							"RunOrder": 1,
+							"ActionTypeId": {
+								"Category": "Source",
+								"Owner": "ThirdParty",
+								"Provider": "GitHub",
+								"Version": "1"
+							},
+							"Configuration": {
+								"Owner": "0x4447",
+								"Repo": "0x4447-product-answering-mashine-name-save",
+								"Branch": { "Ref": "ParamStage" },
+								"PollForSourceChanges": false,
+								"OAuthToken": { "Ref": "ParamGitHubToken" }
+							},
+							"OutputArtifacts": [
+								{
+									"Name": "source_code"
+								}
+							]
+						}
+					]
+				},
+				{
+					"Name": "Cast",
+					"Actions": [
+						{
+							"Name": "Mold",
+							"RunOrder": 1,
+							"InputArtifacts": [
+								{
+									"Name": "source_code"
+								}
+							],
+							"Configuration": {
+								"ProjectName": { "Ref": "CodeBuildLambdaNameSave" }
+							},
+							"ActionTypeId": {
+								"Category": "Build",
+								"Owner": "AWS",
+								"Provider": "CodeBuild",
+								"Version": "1"
+							}
+						}
+					]
+				}
+			]
+		}
+	}
+}

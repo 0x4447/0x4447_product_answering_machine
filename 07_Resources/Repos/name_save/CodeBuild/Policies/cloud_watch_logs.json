@@ -1,0 +1,26 @@
+{
+	"CodeBuildDeployPolicyCWL": {
+		"Type": "AWS::IAM::Policy",
+		"Properties": {
+			"Roles": [ { "Ref": "CodeBuildLambdaNameSaveRole" } ],
+			"PolicyName": "cloud_watch_log_access",
+			"PolicyDocument": {
+				"Version": "2012-10-17",
+				"Statement": [
+					{
+						"Effect": "Allow",
+						"Action": [
+							"logs:CreateLogGroup",
+							"logs:CreateLogStream",
+							"logs:PutLogEvents"
+						],
+						"Resource": [
+							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447-answering-mashine-name_save" },
+							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447-answering-mashine-name_save:*" }
+						]
+					}
+				]
+			}
+		}
+	}
+}

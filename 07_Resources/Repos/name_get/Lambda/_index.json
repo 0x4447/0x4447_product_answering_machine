@@ -1,0 +1,17 @@
+{
+	"LambdaNameGet": {
+		"Type": "AWS::Lambda::Function",
+		"Description": "This lambda get the name, for Lex to red to the caller.",
+		"Properties": {
+			"FunctionName": "0x4447-answering-mashine-name_get",
+			"Code": {
+				"ZipFile": "exports.handler = async (event) => {return true;};"
+			},
+			"Handler": "index.handler",
+			"MemorySize": 128,
+			"Role": { "Fn::GetAtt": ["LambdaNameGetRole", "Arn"] },
+			"Runtime": "nodejs8.10",
+			"Timeout": 60
+		}
+	}
+}
