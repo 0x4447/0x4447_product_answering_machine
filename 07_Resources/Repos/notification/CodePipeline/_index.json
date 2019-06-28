@@ -23,7 +23,7 @@
 							},
 							"Configuration": {
 								"Owner": "0x4447",
-								"Repo": "0x4447-product-answering-machine-notification",
+								"Repo": "0x4447_product_answering_machine_notification",
 								"Branch": { "Ref": "ParamStage" },
 								"PollForSourceChanges": false,
 								"OAuthToken": { "Ref": "ParamGitHubToken" }
