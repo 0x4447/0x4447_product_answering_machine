@@ -1,0 +1,21 @@
+{
+	"LambdaMessageWebhook": {
+		"Type": "AWS::CodePipeline::Webhook",
+		"Properties": {
+			"Authentication": "GITHUB_HMAC",
+			"AuthenticationConfiguration": {
+				"SecretToken": { "Ref": "ParamGitHubToken" }
+			},
+			"Filters": [
+				{
+					"JsonPath": "$.ref",
+					"MatchEquals": "refs/heads/{Branch}"
+				}
+			],
+			"TargetPipeline": { "Ref": "CodePipelineLambdaMessage" },
+			"TargetAction": "Material",
+			"TargetPipelineVersion": { "Fn::GetAtt": [ "CodePipelineLambdaMessage", "Version" ]},
+			"RegisterWithThirdParty": true
+		}
+	}
+}

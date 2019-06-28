@@ -3,7 +3,7 @@
 		"Type": "AWS::Lambda::Function",
 		"Description": "This lambda save the name, for Lex to remember.",
 		"Properties": {
-			"FunctionName": "0x4447-answering-machine-name_save",
+			"FunctionName": "0x4447_answering_machine_name_save",
 			"Code": {
 				"ZipFile": "exports.handler = async (event) => {return true;};"
 			},

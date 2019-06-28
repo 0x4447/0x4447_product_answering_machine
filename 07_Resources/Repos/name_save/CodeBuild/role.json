@@ -2,7 +2,7 @@
 	"CodeBuildLambdaNameSaveRole": {
 		"Type": "AWS::IAM::Role",
 		"Properties": {
-			"RoleName": "0x4447-answering-machine-name_save-codebuild",
+			"RoleName": "0x4447_answering_machine_name_save-codebuild",
 			"AssumeRolePolicyDocument": {
 				"Version": "2012-10-17",
 				"Statement": [

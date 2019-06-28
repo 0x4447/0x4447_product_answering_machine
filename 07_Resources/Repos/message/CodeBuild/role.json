@@ -1,8 +1,8 @@
 {
-	"CodeBuildLambdaNameGetRole": {
+	"CodeBuildLambdaMessageRole": {
 		"Type": "AWS::IAM::Role",
 		"Properties": {
-			"RoleName": "0x4447_answering_machine_name_get-codebuild",
+			"RoleName": "0x4447_answering_machine_message-codebuild",
 			"AssumeRolePolicyDocument": {
 				"Version": "2012-10-17",
 				"Statement": [

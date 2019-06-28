@@ -1,20 +1,23 @@
 {
-	"CodeBuildLambdaNameGetRole": {
+	"LambdaMessageRole": {
 		"Type": "AWS::IAM::Role",
 		"Properties": {
-			"RoleName": "0x4447_answering_machine_name_get-codebuild",
+			"RoleName": "0x4447_answering_machine_message-lambda",
 			"AssumeRolePolicyDocument": {
 				"Version": "2012-10-17",
 				"Statement": [
 					{
 						"Effect": "Allow",
 						"Principal": {
-							"Service": "codebuild.amazonaws.com"
+							"Service": "lambda.amazonaws.com"
 						},
 						"Action": "sts:AssumeRole"
 					}
 				]
-			}
+			},
+			"ManagedPolicyArns": [
+				"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+			]
 		}
 	}
 }

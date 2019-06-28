@@ -2,7 +2,7 @@
 	"CodePipelineLambdaNotification": {
 		"Type": "AWS::CodePipeline::Pipeline",
 		"Properties": {
-			"Name": "0x4447-answering-machine-notification",
+			"Name": "0x4447_answering_machine_notification",
 			"ArtifactStore": {
 				"Location": { "Ref": "CodePipelineBucketName" },
 				"Type": "S3"

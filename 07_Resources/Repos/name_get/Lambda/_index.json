@@ -3,7 +3,7 @@
 		"Type": "AWS::Lambda::Function",
 		"Description": "This lambda get the name, for Lex to red to the caller.",
 		"Properties": {
-			"FunctionName": "0x4447-answering-machine-name_get",
+			"FunctionName": "0x4447_answering_machine_name_get",
 			"Code": {
 				"ZipFile": "exports.handler = async (event) => {return true;};"
 			},

@@ -1,8 +1,8 @@
 {
-	"CodeBuildDeployPolicyCWL": {
+	"CodeBuildMessagePolicyCWL": {
 		"Type": "AWS::IAM::Policy",
 		"Properties": {
-			"Roles": [ { "Ref": "CodeBuildLambdaNameGetRole" } ],
+			"Roles": [ { "Ref": "CodeBuildLambdaMessageRole" } ],
 			"PolicyName": "cloud_watch_log_access",
 			"PolicyDocument": {
 				"Version": "2012-10-17",
@@ -15,8 +15,8 @@
 							"logs:PutLogEvents"
 						],
 						"Resource": [
-							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_name_get" },
-							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_name_get:*" }
+							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_message" },
+							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_message:*" }
 						]
 					}
 				]

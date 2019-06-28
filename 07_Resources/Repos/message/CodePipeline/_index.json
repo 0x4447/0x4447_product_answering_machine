@@ -1,13 +1,13 @@
 {
-	"CodePipelineLambdaNameSave": {
+	"CodePipelineLambdaMessage": {
 		"Type": "AWS::CodePipeline::Pipeline",
 		"Properties": {
-			"Name": "0x4447_answering_machine_name_save",
+			"Name": "0x4447_answering_machine_message",
 			"ArtifactStore": {
 				"Location": { "Ref": "CodePipelineBucketName" },
 				"Type": "S3"
 			},
-			"RoleArn": { "Fn::GetAtt": ["PipelineLambdaNameSaveRole", "Arn"] },
+			"RoleArn": { "Fn::GetAtt": ["PipelineLambdaMessageRole", "Arn"] },
 			"Stages": [
 				{
 					"Name": "Get",
@@ -23,7 +23,7 @@
 							},
 							"Configuration": {
 								"Owner": "0x4447",
-								"Repo": "0x4447_product_answering_machine_name_save",
+								"Repo": "0x4447_product_answering_machine_message",
 								"Branch": { "Ref": "ParamStage" },
 								"PollForSourceChanges": false,
 								"OAuthToken": { "Ref": "ParamGitHubToken" }
@@ -48,7 +48,7 @@
 								}
 							],
 							"Configuration": {
-								"ProjectName": { "Ref": "CodeBuildLambdaNameSave" }
+								"ProjectName": { "Ref": "CodeBuildLambdaMessage" }
 							},
 							"ActionTypeId": {
 								"Category": "Build",
