@@ -15,8 +15,8 @@
 							"logs:PutLogEvents"
 						],
 						"Resource": [
-							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_notification" },
-							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_notification:*" }
+							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_lambda_notification" },
+							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_lambda_notification:*" }
 						]
 					}
 				]

@@ -109,10 +109,10 @@
 				}
 			}
 		},
-		"CodePipelineInbound": {
+		"CodePipelineLambdaNameSave": {
 			"Type": "AWS::CodePipeline::Pipeline",
 			"Properties": {
-				"Name": "0x4447_answering_machine_name_get",
+				"Name": "0x4447_answering_machine_lambda_name_save",
 				"ArtifactStore": {
 					"Location": {
 						"Ref": "CodePipelineBucketName"
@@ -121,7 +121,7 @@
 				},
 				"RoleArn": {
 					"Fn::GetAtt": [
-						"PipelineInboundRole",
+						"PipelineLambdaNameSaveRole",
 						"Arn"
 					]
 				},
@@ -140,7 +140,7 @@
 								},
 								"Configuration": {
 									"Owner": "0x4447",
-									"Repo": "0x4447_product_answering_machine_name_get",
+									"Repo": "0x4447_product_answering_machine_name_save",
 									"Branch": {
 										"Ref": "ParamStage"
 									},
@@ -170,7 +170,7 @@
 								],
 								"Configuration": {
 									"ProjectName": {
-										"Ref": "CodeBuildLambdaNameGet"
+										"Ref": "CodeBuildLambdaNameSave"
 									}
 								},
 								"ActionTypeId": {
@@ -191,7 +191,7 @@
 				"PolicyName": "default",
 				"Roles": [
 					{
-						"Ref": "PipelineLambdaNameSaveRole"
+						"Ref": "PipelineInboundRole"
 					}
 				],
 				"PolicyDocument": {
@@ -341,10 +341,10 @@
 				}
 			}
 		},
-		"PipelineInboundRole": {
+		"PipelineLambdaNameSaveRole": {
 			"Type": "AWS::IAM::Role",
 			"Properties": {
-				"RoleName": "0x4447_answering_machine_name_get-codepipeline",
+				"RoleName": "0x4447_answering_machine_name_save-codepipeline",
 				"AssumeRolePolicyDocument": {
 					"Version": "2012-10-17",
 					"Statement": [
@@ -354,216 +354,6 @@
 								"Service": "codepipeline.amazonaws.com"
 							},
 							"Action": "sts:AssumeRole"
-						}
-					]
-				}
-			}
-		},
-		"LambdaNameGet": {
-			"Type": "AWS::Lambda::Function",
-			"Description": "This lambda get the name, for Lex to red to the caller.",
-			"Properties": {
-				"FunctionName": "0x4447_answering_machine_name_get",
-				"Code": {
-					"ZipFile": "exports.handler = async (event) => {return true;};"
-				},
-				"Handler": "index.handler",
-				"MemorySize": 128,
-				"Role": {
-					"Fn::GetAtt": [
-						"LambdaNameGetRole",
-						"Arn"
-					]
-				},
-				"Runtime": "nodejs8.10",
-				"Timeout": 60
-			}
-		},
-		"S3InboundPermission": {
-			"Type": "AWS::Lambda::Permission",
-			"DependsOn": "LambdaMessage",
-			"Properties": {
-				"Action": "lambda:InvokeFunction",
-				"FunctionName": {
-					"Ref": "LambdaMessage"
-				},
-				"Principal": "s3.amazonaws.com"
-			}
-		},
-		"LambdaNameGetRole": {
-			"Type": "AWS::IAM::Role",
-			"Properties": {
-				"RoleName": "0x4447_answering_machine_name_get-lambda",
-				"AssumeRolePolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Principal": {
-								"Service": "lambda.amazonaws.com"
-							},
-							"Action": "sts:AssumeRole"
-						}
-					]
-				},
-				"ManagedPolicyArns": [
-					"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-				]
-			}
-		},
-		"LambdaNameGetWebhook": {
-			"Type": "AWS::CodePipeline::Webhook",
-			"Properties": {
-				"Authentication": "GITHUB_HMAC",
-				"AuthenticationConfiguration": {
-					"SecretToken": {
-						"Ref": "ParamGitHubToken"
-					}
-				},
-				"Filters": [
-					{
-						"JsonPath": "$.ref",
-						"MatchEquals": "refs/heads/{Branch}"
-					}
-				],
-				"TargetPipeline": {
-					"Ref": "CodePipelineInbound"
-				},
-				"TargetAction": "Material",
-				"TargetPipelineVersion": {
-					"Fn::GetAtt": [
-						"CodePipelineInbound",
-						"Version"
-					]
-				},
-				"RegisterWithThirdParty": true
-			}
-		},
-		"CodeBuildLambdaNameGetRole": {
-			"Type": "AWS::IAM::Role",
-			"Properties": {
-				"RoleName": "0x4447_answering_machine_name_get-codebuild",
-				"AssumeRolePolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Principal": {
-								"Service": "codebuild.amazonaws.com"
-							},
-							"Action": "sts:AssumeRole"
-						}
-					]
-				}
-			}
-		},
-		"CodeBuildLambdaNameGet": {
-			"Type": "AWS::CodeBuild::Project",
-			"Properties": {
-				"Name": "0x4447_answering_machine_name_get",
-				"ServiceRole": {
-					"Fn::GetAtt": [
-						"CodeBuildLambdaNameGetRole",
-						"Arn"
-					]
-				},
-				"TimeoutInMinutes": 60,
-				"Source": {
-					"Type": "CODEPIPELINE",
-					"BuildSpec": "buildspec.yml"
-				},
-				"Artifacts": {
-					"Type": "CODEPIPELINE"
-				},
-				"Environment": {
-					"Type": "LINUX_CONTAINER",
-					"ComputeType": "BUILD_GENERAL1_SMALL",
-					"Image": "aws/codebuild/nodejs:8.11.0",
-					"EnvironmentVariables": [
-						{
-							"Name": "FUNCTION_NAME",
-							"Type": "PLAINTEXT",
-							"Value": {
-								"Ref": "LambdaNameGet"
-							}
-						}
-					]
-				}
-			}
-		},
-		"CodeBuildDeployPolicyCWL": {
-			"Type": "AWS::IAM::Policy",
-			"Properties": {
-				"Roles": [
-					{
-						"Ref": "CodeBuildLambdaNameSaveRole"
-					}
-				],
-				"PolicyName": "cloud_watch_log_access",
-				"PolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Action": [
-								"logs:CreateLogGroup",
-								"logs:CreateLogStream",
-								"logs:PutLogEvents"
-							],
-							"Resource": [
-								{
-									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_name_save"
-								},
-								{
-									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_name_save:*"
-								}
-							]
-						}
-					]
-				}
-			}
-		},
-		"CodeBuildDeployPolicyS3": {
-			"Type": "AWS::IAM::Policy",
-			"Properties": {
-				"Roles": [
-					{
-						"Ref": "CodeBuildLambdaNameSaveRole"
-					}
-				],
-				"PolicyName": "s3_access",
-				"PolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Action": "s3:*",
-							"Resource": {
-								"Fn::Sub": "arn:aws:s3:::${CodePipelineBucketName}/*"
-							}
-						}
-					]
-				}
-			}
-		},
-		"CodeBuildDeployPolicyLambdaUpdate": {
-			"Type": "AWS::IAM::Policy",
-			"Properties": {
-				"Roles": [
-					{
-						"Ref": "CodeBuildLambdaNameSaveRole"
-					}
-				],
-				"PolicyName": "update_lambda_code",
-				"PolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Action": "lambda:UpdateFunctionCode",
-							"Resource": {
-								"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaNameSave}"
-							}
 						}
 					]
 				}
@@ -587,6 +377,17 @@
 				},
 				"Runtime": "nodejs8.10",
 				"Timeout": 60
+			}
+		},
+		"S3InboundPermission": {
+			"Type": "AWS::Lambda::Permission",
+			"DependsOn": "LambdaNotification",
+			"Properties": {
+				"Action": "lambda:InvokeFunction",
+				"FunctionName": {
+					"Ref": "LambdaNotification"
+				},
+				"Principal": "s3.amazonaws.com"
 			}
 		},
 		"LambdaNameSaveRole": {
@@ -638,95 +439,28 @@
 				"RegisterWithThirdParty": true
 			}
 		},
-		"CodePipelineLambdaNameSave": {
-			"Type": "AWS::CodePipeline::Pipeline",
+		"LambdaNameSavePolicyDDB": {
+			"Type": "AWS::IAM::Policy",
 			"Properties": {
-				"Name": "0x4447_answering_machine_name_save",
-				"ArtifactStore": {
-					"Location": {
-						"Ref": "CodePipelineBucketName"
-					},
-					"Type": "S3"
-				},
-				"RoleArn": {
-					"Fn::GetAtt": [
-						"PipelineLambdaNameSaveRole",
-						"Arn"
-					]
-				},
-				"Stages": [
+				"PolicyName": "ddb",
+				"Roles": [
 					{
-						"Name": "Get",
-						"Actions": [
-							{
-								"Name": "Material",
-								"RunOrder": 1,
-								"ActionTypeId": {
-									"Category": "Source",
-									"Owner": "ThirdParty",
-									"Provider": "GitHub",
-									"Version": "1"
-								},
-								"Configuration": {
-									"Owner": "0x4447",
-									"Repo": "0x4447_product_answering_machine_name_save",
-									"Branch": {
-										"Ref": "ParamStage"
-									},
-									"PollForSourceChanges": false,
-									"OAuthToken": {
-										"Ref": "ParamGitHubToken"
-									}
-								},
-								"OutputArtifacts": [
-									{
-										"Name": "source_code"
-									}
-								]
-							}
-						]
-					},
-					{
-						"Name": "Cast",
-						"Actions": [
-							{
-								"Name": "Mold",
-								"RunOrder": 1,
-								"InputArtifacts": [
-									{
-										"Name": "source_code"
-									}
-								],
-								"Configuration": {
-									"ProjectName": {
-										"Ref": "CodeBuildLambdaNameSave"
-									}
-								},
-								"ActionTypeId": {
-									"Category": "Build",
-									"Owner": "AWS",
-									"Provider": "CodeBuild",
-									"Version": "1"
-								}
-							}
-						]
+						"Ref": "LambdaNameSaveRole"
 					}
-				]
-			}
-		},
-		"PipelineLambdaNameSaveRole": {
-			"Type": "AWS::IAM::Role",
-			"Properties": {
-				"RoleName": "0x4447_answering_machine_name_save-codepipeline",
-				"AssumeRolePolicyDocument": {
+				],
+				"PolicyDocument": {
 					"Version": "2012-10-17",
 					"Statement": [
 						{
 							"Effect": "Allow",
-							"Principal": {
-								"Service": "codepipeline.amazonaws.com"
-							},
-							"Action": "sts:AssumeRole"
+							"Action": [
+								"dynamodb:PutItem"
+							],
+							"Resource": [
+								{
+									"Fn::Sub": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/answering_machine"
+								}
+							]
 						}
 					]
 				}
@@ -735,7 +469,7 @@
 		"CodeBuildLambdaNameSave": {
 			"Type": "AWS::CodeBuild::Project",
 			"Properties": {
-				"Name": "0x4447_answering_machine_name_save",
+				"Name": "0x4447_answering_machine_lambda_name_save",
 				"ServiceRole": {
 					"Fn::GetAtt": [
 						"CodeBuildLambdaNameSaveRole",
@@ -784,10 +518,88 @@
 				}
 			}
 		},
-		"CodePipelineLambdaNotification": {
+		"CodeBuildDeployPolicyCWL": {
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"Roles": [
+					{
+						"Ref": "CodeBuildLambdaNameGetRole"
+					}
+				],
+				"PolicyName": "cloud_watch_log_access",
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"logs:CreateLogGroup",
+								"logs:CreateLogStream",
+								"logs:PutLogEvents"
+							],
+							"Resource": [
+								{
+									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_lambda_name_get"
+								},
+								{
+									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_lambda_name_get:*"
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildDeployPolicyS3": {
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"Roles": [
+					{
+						"Ref": "CodeBuildLambdaNameGetRole"
+					}
+				],
+				"PolicyName": "s3_access",
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": "s3:*",
+							"Resource": {
+								"Fn::Sub": "arn:aws:s3:::${CodePipelineBucketName}/*"
+							}
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildDeployPolicyLambdaUpdate": {
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"Roles": [
+					{
+						"Ref": "CodeBuildLambdaNameGetRole"
+					}
+				],
+				"PolicyName": "update_lambda_code",
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": "lambda:UpdateFunctionCode",
+							"Resource": {
+								"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaNameGet}"
+							}
+						}
+					]
+				}
+			}
+		},
+		"CodePipelineInbound": {
 			"Type": "AWS::CodePipeline::Pipeline",
 			"Properties": {
-				"Name": "0x4447_answering_machine_notification",
+				"Name": "0x4447_answering_machine_lambda_name_get",
 				"ArtifactStore": {
 					"Location": {
 						"Ref": "CodePipelineBucketName"
@@ -796,7 +608,7 @@
 				},
 				"RoleArn": {
 					"Fn::GetAtt": [
-						"PipelineLambdaNotificationRole",
+						"PipelineInboundRole",
 						"Arn"
 					]
 				},
@@ -815,7 +627,7 @@
 								},
 								"Configuration": {
 									"Owner": "0x4447",
-									"Repo": "0x4447_product_answering_machine_notification",
+									"Repo": "0x4447_product_answering_machine_name_get",
 									"Branch": {
 										"Ref": "ParamStage"
 									},
@@ -845,7 +657,249 @@
 								],
 								"Configuration": {
 									"ProjectName": {
-										"Ref": "CodeBuildLambdaNotification"
+										"Ref": "CodeBuildLambdaNameGet"
+									}
+								},
+								"ActionTypeId": {
+									"Category": "Build",
+									"Owner": "AWS",
+									"Provider": "CodeBuild",
+									"Version": "1"
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		"PipelineInboundRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": "0x4447_answering_machine_name_get-codepipeline",
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "codepipeline.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildLambdaNameGet": {
+			"Type": "AWS::CodeBuild::Project",
+			"Properties": {
+				"Name": "0x4447_answering_machine_lambda_name_get",
+				"ServiceRole": {
+					"Fn::GetAtt": [
+						"CodeBuildLambdaNameGetRole",
+						"Arn"
+					]
+				},
+				"TimeoutInMinutes": 60,
+				"Source": {
+					"Type": "CODEPIPELINE",
+					"BuildSpec": "buildspec.yml"
+				},
+				"Artifacts": {
+					"Type": "CODEPIPELINE"
+				},
+				"Environment": {
+					"Type": "LINUX_CONTAINER",
+					"ComputeType": "BUILD_GENERAL1_SMALL",
+					"Image": "aws/codebuild/nodejs:8.11.0",
+					"EnvironmentVariables": [
+						{
+							"Name": "FUNCTION_NAME",
+							"Type": "PLAINTEXT",
+							"Value": {
+								"Ref": "LambdaNameGet"
+							}
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildLambdaNameGetRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": "0x4447_answering_machine_name_get-codebuild",
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "codebuild.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+				}
+			}
+		},
+		"LambdaNameGet": {
+			"Type": "AWS::Lambda::Function",
+			"Description": "This lambda get the name, for Lex to red to the caller.",
+			"Properties": {
+				"FunctionName": "0x4447_answering_machine_name_get",
+				"Code": {
+					"ZipFile": "exports.handler = async (event) => {return true;};"
+				},
+				"Handler": "index.handler",
+				"MemorySize": 128,
+				"Role": {
+					"Fn::GetAtt": [
+						"LambdaNameGetRole",
+						"Arn"
+					]
+				},
+				"Runtime": "nodejs8.10",
+				"Timeout": 60
+			}
+		},
+		"LambdaNameGetRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": "0x4447_answering_machine_name_get-lambda",
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "lambda.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+				},
+				"ManagedPolicyArns": [
+					"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+				]
+			}
+		},
+		"LambdaNameGetWebhook": {
+			"Type": "AWS::CodePipeline::Webhook",
+			"Properties": {
+				"Authentication": "GITHUB_HMAC",
+				"AuthenticationConfiguration": {
+					"SecretToken": {
+						"Ref": "ParamGitHubToken"
+					}
+				},
+				"Filters": [
+					{
+						"JsonPath": "$.ref",
+						"MatchEquals": "refs/heads/{Branch}"
+					}
+				],
+				"TargetPipeline": {
+					"Ref": "CodePipelineInbound"
+				},
+				"TargetAction": "Material",
+				"TargetPipelineVersion": {
+					"Fn::GetAtt": [
+						"CodePipelineInbound",
+						"Version"
+					]
+				},
+				"RegisterWithThirdParty": true
+			}
+		},
+		"LambdaNameGetPolicyDDB": {
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "ddb",
+				"Roles": [
+					{
+						"Ref": "LambdaNameGetRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"dynamodb:GetItem"
+							],
+							"Resource": [
+								{
+									"Fn::Sub": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/answering_machine"
+								}
+							]
+						}
+					]
+				}
+			}
+		},
+		"CodePipelineLambdaMessage": {
+			"Type": "AWS::CodePipeline::Pipeline",
+			"Properties": {
+				"Name": "0x4447_answering_machine_lambda_message",
+				"ArtifactStore": {
+					"Location": {
+						"Ref": "CodePipelineBucketName"
+					},
+					"Type": "S3"
+				},
+				"RoleArn": {
+					"Fn::GetAtt": [
+						"PipelineLambdaMessageRole",
+						"Arn"
+					]
+				},
+				"Stages": [
+					{
+						"Name": "Get",
+						"Actions": [
+							{
+								"Name": "Material",
+								"RunOrder": 1,
+								"ActionTypeId": {
+									"Category": "Source",
+									"Owner": "ThirdParty",
+									"Provider": "GitHub",
+									"Version": "1"
+								},
+								"Configuration": {
+									"Owner": "0x4447",
+									"Repo": "0x4447_product_answering_machine_message",
+									"Branch": {
+										"Ref": "ParamStage"
+									},
+									"PollForSourceChanges": false,
+									"OAuthToken": {
+										"Ref": "ParamGitHubToken"
+									}
+								},
+								"OutputArtifacts": [
+									{
+										"Name": "source_code"
+									}
+								]
+							}
+						]
+					},
+					{
+						"Name": "Cast",
+						"Actions": [
+							{
+								"Name": "Mold",
+								"RunOrder": 1,
+								"InputArtifacts": [
+									{
+										"Name": "source_code"
+									}
+								],
+								"Configuration": {
+									"ProjectName": {
+										"Ref": "CodeBuildLambdaMessage"
 									}
 								},
 								"ActionTypeId": {
@@ -866,7 +920,7 @@
 				"PolicyName": "default",
 				"Roles": [
 					{
-						"Ref": "PipelineLambdaMessageRole"
+						"Ref": "PipelineLambdaNotificationRole"
 					}
 				],
 				"PolicyDocument": {
@@ -902,11 +956,11 @@
 						},
 						{
 							"Action": [
-								"codedeploy:CreateMessagement",
+								"codedeploy:CreateNotificationment",
 								"codedeploy:GetApplication",
 								"codedeploy:GetApplicationRevision",
-								"codedeploy:GetMessagement",
-								"codedeploy:GetMessagementConfig",
+								"codedeploy:GetNotificationment",
+								"codedeploy:GetNotificationmentConfig",
 								"codedeploy:RegisterApplicationRevision"
 							],
 							"Resource": "*",
@@ -939,10 +993,10 @@
 						},
 						{
 							"Action": [
-								"opsworks:CreateMessagement",
+								"opsworks:CreateNotificationment",
 								"opsworks:DescribeApps",
 								"opsworks:DescribeCommands",
-								"opsworks:DescribeMessagements",
+								"opsworks:DescribeNotificationments",
 								"opsworks:DescribeInstances",
 								"opsworks:DescribeStacks",
 								"opsworks:UpdateApp",
@@ -1014,299 +1068,6 @@
 						}
 					]
 				}
-			}
-		},
-		"PipelineLambdaNotificationRole": {
-			"Type": "AWS::IAM::Role",
-			"Properties": {
-				"RoleName": "0x4447_answering_machine_notification-codepipeline",
-				"AssumeRolePolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Principal": {
-								"Service": "codepipeline.amazonaws.com"
-							},
-							"Action": "sts:AssumeRole"
-						}
-					]
-				}
-			}
-		},
-		"LambdaNotification": {
-			"Type": "AWS::Lambda::Function",
-			"Description": "This lambda save the name, for Lex to remember.",
-			"Properties": {
-				"FunctionName": "0x4447_answering_machine_notification",
-				"Code": {
-					"ZipFile": "exports.handler = async (event) => {return true;};"
-				},
-				"Handler": "index.handler",
-				"MemorySize": 128,
-				"Role": {
-					"Fn::GetAtt": [
-						"LambdaNotificationRole",
-						"Arn"
-					]
-				},
-				"Runtime": "nodejs8.10",
-				"Timeout": 60
-			}
-		},
-		"LambdaNotificationRole": {
-			"Type": "AWS::IAM::Role",
-			"Properties": {
-				"RoleName": "0x4447_answering_machine_notification-lambda",
-				"AssumeRolePolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Principal": {
-								"Service": "lambda.amazonaws.com"
-							},
-							"Action": "sts:AssumeRole"
-						}
-					]
-				},
-				"ManagedPolicyArns": [
-					"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
-				]
-			}
-		},
-		"LambdaNotificationWebhook": {
-			"Type": "AWS::CodePipeline::Webhook",
-			"Properties": {
-				"Authentication": "GITHUB_HMAC",
-				"AuthenticationConfiguration": {
-					"SecretToken": {
-						"Ref": "ParamGitHubToken"
-					}
-				},
-				"Filters": [
-					{
-						"JsonPath": "$.ref",
-						"MatchEquals": "refs/heads/{Branch}"
-					}
-				],
-				"TargetPipeline": {
-					"Ref": "CodePipelineLambdaNotification"
-				},
-				"TargetAction": "Material",
-				"TargetPipelineVersion": {
-					"Fn::GetAtt": [
-						"CodePipelineLambdaNotification",
-						"Version"
-					]
-				},
-				"RegisterWithThirdParty": true
-			}
-		},
-		"CodeBuildLambdaNotification": {
-			"Type": "AWS::CodeBuild::Project",
-			"Properties": {
-				"Name": "0x4447_answering_machine_notification",
-				"ServiceRole": {
-					"Fn::GetAtt": [
-						"CodeBuildLambdaNotificationRole",
-						"Arn"
-					]
-				},
-				"TimeoutInMinutes": 60,
-				"Source": {
-					"Type": "CODEPIPELINE",
-					"BuildSpec": "buildspec.yml"
-				},
-				"Artifacts": {
-					"Type": "CODEPIPELINE"
-				},
-				"Environment": {
-					"Type": "LINUX_CONTAINER",
-					"ComputeType": "BUILD_GENERAL1_SMALL",
-					"Image": "aws/codebuild/nodejs:8.11.0",
-					"EnvironmentVariables": [
-						{
-							"Name": "FUNCTION_NAME",
-							"Type": "PLAINTEXT",
-							"Value": {
-								"Ref": "LambdaNotification"
-							}
-						}
-					]
-				}
-			}
-		},
-		"CodeBuildLambdaNotificationRole": {
-			"Type": "AWS::IAM::Role",
-			"Properties": {
-				"RoleName": "0x4447_answering_machine_notification-codebuild",
-				"AssumeRolePolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Principal": {
-								"Service": "codebuild.amazonaws.com"
-							},
-							"Action": "sts:AssumeRole"
-						}
-					]
-				}
-			}
-		},
-		"CodeBuildNotificationPolicyCWL": {
-			"Type": "AWS::IAM::Policy",
-			"Properties": {
-				"Roles": [
-					{
-						"Ref": "CodeBuildLambdaNotificationRole"
-					}
-				],
-				"PolicyName": "cloud_watch_log_access",
-				"PolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Action": [
-								"logs:CreateLogGroup",
-								"logs:CreateLogStream",
-								"logs:PutLogEvents"
-							],
-							"Resource": [
-								{
-									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_notification"
-								},
-								{
-									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_notification:*"
-								}
-							]
-						}
-					]
-				}
-			}
-		},
-		"CodeBuildNotificationPolicyLambdaUpdate": {
-			"Type": "AWS::IAM::Policy",
-			"Properties": {
-				"Roles": [
-					{
-						"Ref": "CodeBuildLambdaNotificationRole"
-					}
-				],
-				"PolicyName": "update_lambda_code",
-				"PolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Action": "lambda:UpdateFunctionCode",
-							"Resource": {
-								"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaNotification}"
-							}
-						}
-					]
-				}
-			}
-		},
-		"CodeBuildNotificationPolicyS3": {
-			"Type": "AWS::IAM::Policy",
-			"Properties": {
-				"Roles": [
-					{
-						"Ref": "CodeBuildLambdaNotificationRole"
-					}
-				],
-				"PolicyName": "s3_access",
-				"PolicyDocument": {
-					"Version": "2012-10-17",
-					"Statement": [
-						{
-							"Effect": "Allow",
-							"Action": "s3:*",
-							"Resource": {
-								"Fn::Sub": "arn:aws:s3:::${CodePipelineBucketName}/*"
-							}
-						}
-					]
-				}
-			}
-		},
-		"CodePipelineLambdaMessage": {
-			"Type": "AWS::CodePipeline::Pipeline",
-			"Properties": {
-				"Name": "0x4447_answering_machine_message",
-				"ArtifactStore": {
-					"Location": {
-						"Ref": "CodePipelineBucketName"
-					},
-					"Type": "S3"
-				},
-				"RoleArn": {
-					"Fn::GetAtt": [
-						"PipelineLambdaMessageRole",
-						"Arn"
-					]
-				},
-				"Stages": [
-					{
-						"Name": "Get",
-						"Actions": [
-							{
-								"Name": "Material",
-								"RunOrder": 1,
-								"ActionTypeId": {
-									"Category": "Source",
-									"Owner": "ThirdParty",
-									"Provider": "GitHub",
-									"Version": "1"
-								},
-								"Configuration": {
-									"Owner": "0x4447",
-									"Repo": "0x4447_product_answering_machine_message",
-									"Branch": {
-										"Ref": "ParamStage"
-									},
-									"PollForSourceChanges": false,
-									"OAuthToken": {
-										"Ref": "ParamGitHubToken"
-									}
-								},
-								"OutputArtifacts": [
-									{
-										"Name": "source_code"
-									}
-								]
-							}
-						]
-					},
-					{
-						"Name": "Cast",
-						"Actions": [
-							{
-								"Name": "Mold",
-								"RunOrder": 1,
-								"InputArtifacts": [
-									{
-										"Name": "source_code"
-									}
-								],
-								"Configuration": {
-									"ProjectName": {
-										"Ref": "CodeBuildLambdaMessage"
-									}
-								},
-								"ActionTypeId": {
-									"Category": "Build",
-									"Owner": "AWS",
-									"Provider": "CodeBuild",
-									"Version": "1"
-								}
-							}
-						]
-					}
-				]
 			}
 		},
 		"PipelineLambdaMessageRole": {
@@ -1399,7 +1160,7 @@
 		"CodeBuildLambdaMessage": {
 			"Type": "AWS::CodeBuild::Project",
 			"Properties": {
-				"Name": "0x4447_answering_machine_message",
+				"Name": "0x4447_answering_machine_lambda_message",
 				"ServiceRole": {
 					"Fn::GetAtt": [
 						"CodeBuildLambdaMessageRole",
@@ -1469,12 +1230,35 @@
 							],
 							"Resource": [
 								{
-									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_message"
+									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_lambda_message"
 								},
 								{
-									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_message:*"
+									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_lambda_message:*"
 								}
 							]
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildMessagePolicyLambdaUpdate": {
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"Roles": [
+					{
+						"Ref": "CodeBuildLambdaMessageRole"
+					}
+				],
+				"PolicyName": "update_lambda_code",
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": "lambda:UpdateFunctionCode",
+							"Resource": {
+								"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaMessage}"
+							}
 						}
 					]
 				}
@@ -1503,12 +1287,250 @@
 				}
 			}
 		},
-		"CodeBuildMessagePolicyLambdaUpdate": {
+		"CodePipelineLambdaNotification": {
+			"Type": "AWS::CodePipeline::Pipeline",
+			"Properties": {
+				"Name": "0x4447_answering_machine_lambda_notification",
+				"ArtifactStore": {
+					"Location": {
+						"Ref": "CodePipelineBucketName"
+					},
+					"Type": "S3"
+				},
+				"RoleArn": {
+					"Fn::GetAtt": [
+						"PipelineLambdaNotificationRole",
+						"Arn"
+					]
+				},
+				"Stages": [
+					{
+						"Name": "Get",
+						"Actions": [
+							{
+								"Name": "Material",
+								"RunOrder": 1,
+								"ActionTypeId": {
+									"Category": "Source",
+									"Owner": "ThirdParty",
+									"Provider": "GitHub",
+									"Version": "1"
+								},
+								"Configuration": {
+									"Owner": "0x4447",
+									"Repo": "0x4447_product_answering_machine_notification",
+									"Branch": {
+										"Ref": "ParamStage"
+									},
+									"PollForSourceChanges": false,
+									"OAuthToken": {
+										"Ref": "ParamGitHubToken"
+									}
+								},
+								"OutputArtifacts": [
+									{
+										"Name": "source_code"
+									}
+								]
+							}
+						]
+					},
+					{
+						"Name": "Cast",
+						"Actions": [
+							{
+								"Name": "Mold",
+								"RunOrder": 1,
+								"InputArtifacts": [
+									{
+										"Name": "source_code"
+									}
+								],
+								"Configuration": {
+									"ProjectName": {
+										"Ref": "CodeBuildLambdaNotification"
+									}
+								},
+								"ActionTypeId": {
+									"Category": "Build",
+									"Owner": "AWS",
+									"Provider": "CodeBuild",
+									"Version": "1"
+								}
+							}
+						]
+					}
+				]
+			}
+		},
+		"PipelineLambdaNotificationRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": "0x4447_answering_machine_notification-codepipeline",
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "codepipeline.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+				}
+			}
+		},
+		"LambdaNotification": {
+			"Type": "AWS::Lambda::Function",
+			"Description": "This lambda save the name, for Lex to remember.",
+			"Properties": {
+				"FunctionName": "0x4447_answering_machine_notification",
+				"Code": {
+					"ZipFile": "exports.handler = async (event) => {return true;};"
+				},
+				"Handler": "index.handler",
+				"MemorySize": 128,
+				"Role": {
+					"Fn::GetAtt": [
+						"LambdaNotificationRole",
+						"Arn"
+					]
+				},
+				"Runtime": "nodejs8.10",
+				"Timeout": 60
+			}
+		},
+		"LambdaNotificationRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": "0x4447_answering_machine_notification-lambda",
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "lambda.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+				},
+				"ManagedPolicyArns": [
+					"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+				]
+			}
+		},
+		"LambdaNotificationWebhook": {
+			"Type": "AWS::CodePipeline::Webhook",
+			"Properties": {
+				"Authentication": "GITHUB_HMAC",
+				"AuthenticationConfiguration": {
+					"SecretToken": {
+						"Ref": "ParamGitHubToken"
+					}
+				},
+				"Filters": [
+					{
+						"JsonPath": "$.ref",
+						"MatchEquals": "refs/heads/{Branch}"
+					}
+				],
+				"TargetPipeline": {
+					"Ref": "CodePipelineLambdaNotification"
+				},
+				"TargetAction": "Material",
+				"TargetPipelineVersion": {
+					"Fn::GetAtt": [
+						"CodePipelineLambdaNotification",
+						"Version"
+					]
+				},
+				"RegisterWithThirdParty": true
+			}
+		},
+		"LambdaNotificationPolicyDDB": {
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"PolicyName": "ses",
+				"Roles": [
+					{
+						"Ref": "LambdaNotificationRole"
+					}
+				],
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"ses:*"
+							],
+							"Resource": "*"
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildLambdaNotification": {
+			"Type": "AWS::CodeBuild::Project",
+			"Properties": {
+				"Name": "0x4447_answering_machine_lambda_notification",
+				"ServiceRole": {
+					"Fn::GetAtt": [
+						"CodeBuildLambdaNotificationRole",
+						"Arn"
+					]
+				},
+				"TimeoutInMinutes": 60,
+				"Source": {
+					"Type": "CODEPIPELINE",
+					"BuildSpec": "buildspec.yml"
+				},
+				"Artifacts": {
+					"Type": "CODEPIPELINE"
+				},
+				"Environment": {
+					"Type": "LINUX_CONTAINER",
+					"ComputeType": "BUILD_GENERAL1_SMALL",
+					"Image": "aws/codebuild/nodejs:8.11.0",
+					"EnvironmentVariables": [
+						{
+							"Name": "FUNCTION_NAME",
+							"Type": "PLAINTEXT",
+							"Value": {
+								"Ref": "LambdaNotification"
+							}
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildLambdaNotificationRole": {
+			"Type": "AWS::IAM::Role",
+			"Properties": {
+				"RoleName": "0x4447_answering_machine_notification-codebuild",
+				"AssumeRolePolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Principal": {
+								"Service": "codebuild.amazonaws.com"
+							},
+							"Action": "sts:AssumeRole"
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildNotificationPolicyLambdaUpdate": {
 			"Type": "AWS::IAM::Policy",
 			"Properties": {
 				"Roles": [
 					{
-						"Ref": "CodeBuildLambdaMessageRole"
+						"Ref": "CodeBuildLambdaNotificationRole"
 					}
 				],
 				"PolicyName": "update_lambda_code",
@@ -1519,8 +1541,63 @@
 							"Effect": "Allow",
 							"Action": "lambda:UpdateFunctionCode",
 							"Resource": {
-								"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaMessage}"
+								"Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:${LambdaNotification}"
 							}
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildNotificationPolicyS3": {
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"Roles": [
+					{
+						"Ref": "CodeBuildLambdaNotificationRole"
+					}
+				],
+				"PolicyName": "s3_access",
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": "s3:*",
+							"Resource": {
+								"Fn::Sub": "arn:aws:s3:::${CodePipelineBucketName}/*"
+							}
+						}
+					]
+				}
+			}
+		},
+		"CodeBuildNotificationPolicyCWL": {
+			"Type": "AWS::IAM::Policy",
+			"Properties": {
+				"Roles": [
+					{
+						"Ref": "CodeBuildLambdaNotificationRole"
+					}
+				],
+				"PolicyName": "cloud_watch_log_access",
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+					"Statement": [
+						{
+							"Effect": "Allow",
+							"Action": [
+								"logs:CreateLogGroup",
+								"logs:CreateLogStream",
+								"logs:PutLogEvents"
+							],
+							"Resource": [
+								{
+									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_lambda_notification"
+								},
+								{
+									"Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447_answering_machine_lambda_notification:*"
+								}
+							]
 						}
 					]
 				}

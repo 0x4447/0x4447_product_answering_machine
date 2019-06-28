@@ -2,7 +2,7 @@
 	"CodePipelineInbound": {
 		"Type": "AWS::CodePipeline::Pipeline",
 		"Properties": {
-			"Name": "0x4447_answering_machine_name_get",
+			"Name": "0x4447_answering_machine_lambda_name_get",
 			"ArtifactStore": {
 				"Location": { "Ref": "CodePipelineBucketName" },
 				"Type": "S3"

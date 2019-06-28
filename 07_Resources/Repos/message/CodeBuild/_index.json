@@ -2,7 +2,7 @@
 	"CodeBuildLambdaMessage": {
 		"Type": "AWS::CodeBuild::Project",
 		"Properties": {
-			"Name": "0x4447_answering_machine_message",
+			"Name": "0x4447_answering_machine_lambda_message",
 			"ServiceRole": { "Fn::GetAtt": ["CodeBuildLambdaMessageRole", "Arn"] },
 			"TimeoutInMinutes": 60,
 			"Source": {

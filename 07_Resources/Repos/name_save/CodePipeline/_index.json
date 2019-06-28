@@ -2,7 +2,7 @@
 	"CodePipelineLambdaNameSave": {
 		"Type": "AWS::CodePipeline::Pipeline",
 		"Properties": {
-			"Name": "0x4447_answering_machine_name_save",
+			"Name": "0x4447_answering_machine_lambda_name_save",
 			"ArtifactStore": {
 				"Location": { "Ref": "CodePipelineBucketName" },
 				"Type": "S3"

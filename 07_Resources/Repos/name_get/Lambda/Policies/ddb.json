@@ -1,0 +1,23 @@
+{
+	"LambdaNameGetPolicyDDB": {
+		"Type": "AWS::IAM::Policy",
+		"Properties": {
+			"PolicyName": "ddb",
+			"Roles": [ { "Ref": "LambdaNameGetRole" } ],
+			"PolicyDocument": {
+				"Version": "2012-10-17",
+				"Statement": [
+					{
+						"Effect": "Allow",
+						"Action": [
+							"dynamodb:GetItem"
+						],
+						"Resource": [
+							{ "Fn::Sub": "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/answering_machine" }
+						]
+					}
+				]
+			}
+		}
+	}
+}

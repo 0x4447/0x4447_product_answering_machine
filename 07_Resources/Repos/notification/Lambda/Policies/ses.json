@@ -1,0 +1,21 @@
+{
+	"LambdaNotificationPolicyDDB": {
+		"Type": "AWS::IAM::Policy",
+		"Properties": {
+			"PolicyName": "ses",
+			"Roles": [ { "Ref": "LambdaNotificationRole" } ],
+			"PolicyDocument": {
+				"Version": "2012-10-17",
+				"Statement": [
+					{
+						"Effect": "Allow",
+						"Action": [
+							"ses:*"
+						],
+						"Resource": "*"
+					}
+				]
+			}
+		}
+	}
+}
