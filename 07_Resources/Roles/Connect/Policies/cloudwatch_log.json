@@ -1,0 +1,25 @@
+{
+	"ConnectPolicy": {
+		"Type": "AWS::IAM::Policy",
+		"Properties": {
+			"Roles": [ { "Ref": "ConnectRole" } ],
+			"PolicyName": "cloudwatch_log",
+			"PolicyDocument": {
+				"Version": "2012-10-17",
+				"Statement": [
+					{
+						"Effect": "Allow",
+						"Action": [
+							"logs:CreateLogStream",
+							"logs:DescribeLogStreams",
+							"logs:PutLogEvents"
+						],
+						"Resource": [
+							"arn:aws:logs:us-east-1:239748505547:log-group:/aws/connect/0x4447-hq:*"
+						]
+					}
+				]
+			}
+		}
+	}
+}

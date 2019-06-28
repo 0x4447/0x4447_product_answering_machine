@@ -2,7 +2,7 @@
 	"LambdaNotificationRole": {
 		"Type": "AWS::IAM::Role",
 		"Properties": {
-			"RoleName": "0x4447-answering-mashine-notification-lambda",
+			"RoleName": "0x4447-answering-machine-notification-lambda",
 			"AssumeRolePolicyDocument": {
 				"Version": "2012-10-17",
 				"Statement": [

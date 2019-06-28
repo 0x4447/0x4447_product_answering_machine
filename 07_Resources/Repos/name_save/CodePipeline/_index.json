@@ -2,7 +2,7 @@
 	"CodePipelineLambdaNameSave": {
 		"Type": "AWS::CodePipeline::Pipeline",
 		"Properties": {
-			"Name": "0x4447-answering-mashine-name_save",
+			"Name": "0x4447-answering-machine-name_save",
 			"ArtifactStore": {
 				"Location": { "Ref": "CodePipelineBucketName" },
 				"Type": "S3"
@@ -23,7 +23,7 @@
 							},
 							"Configuration": {
 								"Owner": "0x4447",
-								"Repo": "0x4447-product-answering-mashine-name-save",
+								"Repo": "0x4447-product-answering-machine-name-save",
 								"Branch": { "Ref": "ParamStage" },
 								"PollForSourceChanges": false,
 								"OAuthToken": { "Ref": "ParamGitHubToken" }

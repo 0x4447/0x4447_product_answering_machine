@@ -1,15 +1,15 @@
 {
-	"CodeBuildLambdaNotificationRole": {
+	"ConnectRole": {
 		"Type": "AWS::IAM::Role",
 		"Properties": {
-			"RoleName": "0x4447-answering-machine-notification-codebuild",
+			"RoleName": "0x4447-answering-machine-connect",
 			"AssumeRolePolicyDocument": {
 				"Version": "2012-10-17",
 				"Statement": [
 					{
 						"Effect": "Allow",
 						"Principal": {
-							"Service": "codebuild.amazonaws.com"
+							"Service": "connect.amazonaws.com"
 						},
 						"Action": "sts:AssumeRole"
 					}

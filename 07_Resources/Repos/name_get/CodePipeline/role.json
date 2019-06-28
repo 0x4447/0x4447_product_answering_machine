@@ -2,7 +2,7 @@
 	"PipelineInboundRole": {
 		"Type": "AWS::IAM::Role",
 		"Properties": {
-			"RoleName": "0x4447-answering-mashine-name_get-codepipeline",
+			"RoleName": "0x4447-answering-machine-name_get-codepipeline",
 			"AssumeRolePolicyDocument": {
 				"Version": "2012-10-17",
 				"Statement": [

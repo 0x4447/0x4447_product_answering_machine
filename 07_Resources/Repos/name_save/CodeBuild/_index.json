@@ -2,7 +2,7 @@
 	"CodeBuildLambdaNameSave": {
 		"Type": "AWS::CodeBuild::Project",
 		"Properties": {
-			"Name": "0x4447-answering-mashine-name_save",
+			"Name": "0x4447-answering-machine-name_save",
 			"ServiceRole": { "Fn::GetAtt": ["CodeBuildLambdaNameSaveRole", "Arn"] },
 			"TimeoutInMinutes": 60,
 			"Source": {

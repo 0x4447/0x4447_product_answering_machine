@@ -15,8 +15,8 @@
 							"logs:PutLogEvents"
 						],
 						"Resource": [
-							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447-answering-mashine-name_save" },
-							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447-answering-mashine-name_save:*" }
+							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447-answering-machine-name_save" },
+							{ "Fn::Sub": "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/0x4447-answering-machine-name_save:*" }
 						]
 					}
 				]

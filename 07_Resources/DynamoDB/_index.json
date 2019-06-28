@@ -2,7 +2,7 @@
 	"DDBData": {
 		"Type": "AWS::DynamoDB::Table",
 		"Properties": {
-			"TableName": "answering_mashine",
+			"TableName": "answering_machine",
 			"AttributeDefinitions": [
 				{
 					"AttributeName": "id",

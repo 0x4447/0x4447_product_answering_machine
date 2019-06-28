@@ -2,7 +2,7 @@
 	"CodeBuildLambdaNotification": {
 		"Type": "AWS::CodeBuild::Project",
 		"Properties": {
-			"Name": "0x4447-answering-mashine-notification",
+			"Name": "0x4447-answering-machine-notification",
 			"ServiceRole": { "Fn::GetAtt": ["CodeBuildLambdaNotificationRole", "Arn"] },
 			"TimeoutInMinutes": 60,
 			"Source": {

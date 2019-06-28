@@ -2,7 +2,7 @@
 	"CodeBuildLambdaNameGet": {
 		"Type": "AWS::CodeBuild::Project",
 		"Properties": {
-			"Name": "0x4447-answering-mashine-name_get",
+			"Name": "0x4447-answering-machine-name_get",
 			"ServiceRole": { "Fn::GetAtt": ["CodeBuildLambdaNameGetRole", "Arn"] },
 			"TimeoutInMinutes": 60,
 			"Source": {

@@ -2,7 +2,7 @@
 	"LambdaNameGetRole": {
 		"Type": "AWS::IAM::Role",
 		"Properties": {
-			"RoleName": "0x4447-answering-mashine-name_get-lambda",
+			"RoleName": "0x4447-answering-machine-name_get-lambda",
 			"AssumeRolePolicyDocument": {
 				"Version": "2012-10-17",
 				"Statement": [

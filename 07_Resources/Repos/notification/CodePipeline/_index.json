@@ -2,7 +2,7 @@
 	"CodePipelineLambdaNotification": {
 		"Type": "AWS::CodePipeline::Pipeline",
 		"Properties": {
-			"Name": "0x4447-answering-mashine-notification",
+			"Name": "0x4447-answering-machine-notification",
 			"ArtifactStore": {
 				"Location": { "Ref": "CodePipelineBucketName" },
 				"Type": "S3"
@@ -23,7 +23,7 @@
 							},
 							"Configuration": {
 								"Owner": "0x4447",
-								"Repo": "0x4447-product-answering-mashine-notification",
+								"Repo": "0x4447-product-answering-machine-notification",
 								"Branch": { "Ref": "ParamStage" },
 								"PollForSourceChanges": false,
 								"OAuthToken": { "Ref": "ParamGitHubToken" }
