@@ -28,21 +28,21 @@ This stack is available to anyone at no cost, but on an as-is basis. 0x4447 LLC 
 
 # How to deploy
 
-<a target="_blank" href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=zer0x4447-S3-Email&templateURL=https://s3.amazonaws.com/0x4447-drive-cloudformation/s3-email.json">
+<a target="_blank" href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=zer0x4447-S3-Email&templateURL=https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json">
 <img align="left" style="float: left; margin: 0 10px 0 0;" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png"></a>
 
-All you need to do to deploy this stack is click the button to the left and follow the instructions that CloudFormation provides in your AWS Dashboard. Alternatively you can download the CF file from [here](https://s3.amazonaws.com/0x4447-drive-cloudformation/s3-email.json).
+All you need to do to deploy this stack is click the button to the left and follow the instructions that CloudFormation provides in your AWS Dashboard. Alternatively you can download the CF file from [here](https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json).
 
 # What will deploy?
 
-![S3-Email Diagram](https://raw.githubusercontent.com/0x4447/0x4447-product-s3-email/assets/diagram.png)
+![S3-Email Diagram](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/diagram.png)
 
 The stack takes advantage of AWS S3, AWS SES, AWS Lambda, and the AWS Trigger system to tie everything together. You'll get:
 
 - 4x AWS Lambdas (1x CodeBuild and 1x CodePipeline for each Lambda to support auto-deployment)
 - 1x DynamoDB table
 
-All project resources can be found [here](https://github.com/topics/0x4447-product-s3-email).
+All project resources can be found [here](https://github.com/topics/0x4447-product-answering-machine).
 
 # Auto deploy
 
