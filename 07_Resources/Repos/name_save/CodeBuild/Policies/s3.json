@@ -1,5 +1,5 @@
 {
-	"CodeBuildDeployPolicyS3": {
+	"CodeBuildNameSavePolicyS3": {
 		"Type": "AWS::IAM::Policy",
 		"Properties": {
 			"Roles": [ { "Ref": "CodeBuildLambdaNameSaveRole" } ],

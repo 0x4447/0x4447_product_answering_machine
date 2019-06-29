@@ -1,5 +1,5 @@
 {
-	"CodeBuildDeployPolicyLambdaUpdate": {
+	"CodeBuildNameGetPolicyLambdaUpdate": {
 		"Type": "AWS::IAM::Policy",
 		"Properties": {
 			"Roles": [ { "Ref": "CodeBuildLambdaNameGetRole" } ],
