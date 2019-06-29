@@ -46,7 +46,7 @@ All project resources can be found [here](https://github.com/topics/0x4447-produ
 
 # Auto deploy
 
-The stack is set up in a such a way that any time new code is pushed to a selected branch, the CodePipeline picks up the change and updates the Lambda for you. These are the available branches:
+The stack is set up in a such a way that any time new code is pushed to a selected branch, the CodePipeline picks up the change and updates the Lambdas for you. These are the available branches:
 
 - **master**: the latest stable code
 - **development**: unstable code that we test in our test environment - we don't recommend that you use this branch
@@ -55,11 +55,11 @@ The stack is set up in a such a way that any time new code is pushed to a select
 
 Sadly at the time of writing this Lex and Connect are not supported by CloudFormation, this means that once the stack is deployed you will configure this two services by hand.
 
-# AWS Lex
+### AWS Lex
 
 Instructions
 
-# Amazon Connect
+### Amazon Connect
 
 Instructions
 
