@@ -1,0 +1,6 @@
+{
+	"ParamEmailTo": {
+		"Description": "The email used to send you the notification, for example: \"First Last\" <name@example.com>",
+		"Type": "String"
+	}
+}

@@ -1,18 +1,18 @@
 {
-	"LambdaNotificationPolicyDDB": {
+	"LambdaNotificationPolicy": {
 		"Type": "AWS::IAM::Policy",
 		"Properties": {
-			"PolicyName": "ses",
+			"PolicyName": "invoke",
 			"Roles": [ { "Ref": "LambdaNotificationRole" } ],
 			"PolicyDocument": {
 				"Version": "2012-10-17",
 				"Statement": [
 					{
 						"Effect": "Allow",
-						"Action": [
-							"ses:*"
-						],
-						"Resource": "*"
+						"Action": "lambda:InvokeFunction",
+						"Resource": [
+							{ "Fn::Sub": "arn:aws:lambda:${AWS::Region}:${AWS::AccountId}:function:Toolbox_Send_Email" }
+						]
 					}
 				]
 			}
