@@ -9,4 +9,4 @@ phases:
       - grapes -s .
   post_build:
     finally:
-      - aws s3 cp ./CloudFormation.json s3://0x4447-drive-cloudformation/s3-email.json --acl public-read
+      - aws s3 cp ./CloudFormation.json s3://0x4447-drive-cloudformation/answering-machine.json --acl public-read
