@@ -119,7 +119,7 @@ At this stage you can download our [contact flow that we create](https://raw.git
 
 Instructions how to edit the JSON file
 
-Once the file is changed you can import the flow: at the top right corner you have the `Save` button, which has an arrow pointing down. Click on it and select `Import flow (beta)`. Select the file, and upload it. At this stage we have to attach the flow we made with a phone number. To do so, follow this steps:
+Once the file is changed you can import the flow: at the top right corner you have the `Save` button, which has an arrow pointing down. Click on it and select `Import flow (beta)`. Select the file, and upload it. Once the flow will show up on the page, **don't forget** to click `Publish`. At this stage we have to attach the flow we made with a phone number. To do so, follow this steps:
 
 1. From the left menu list, select the 3th icon, and and click `Phone numbers`.
 1. Click `Claim a number` that you can find on the right side of the page.
