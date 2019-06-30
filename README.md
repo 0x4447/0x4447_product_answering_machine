@@ -93,11 +93,11 @@ Sadly at the time of writing this Lex and Connect are not supported by CloudForm
 
 1. Go to the [Connect console](https://console.aws.amazon.com/connect/home).
 1. Click the blue `Add an instance` button.
-1. Check `Store users within Amazon Connect`, and write the name for the `Access URL`, and then click `Next step`.
-1. On the `Create an Administrator` page, fill out the form for a new admin user - this has nothing to do with a IAM user. Once ready click `Next step`.
-1. On the `Telephony Options` check all the options if you want, then click `Next step`.
-1. Keep the `Data storage` page as is by clicking `Next step`.
-1. Review the setup and once ready click `Create instance`
+	1. Check `Store users within Amazon Connect`, and write the name for the `Access URL`, and then click `Next step`.
+	1. On the `Create an Administrator` page, fill out the form for a new admin user - this has nothing to do with a IAM user. Once ready click `Next step`.
+	1. On the `Telephony Options` check all the options if you want, then click `Next step`.
+	1. Keep the `Data storage` page as is by clicking `Next step`.
+	1. Review the setup and once ready click `Create instance`
 1. Click on your new Connect setup, and on the left menu, at the bottom, click `Contact flows`.
 	1. In the `Amazon Lex` section select the region where you created the bot.
 	1. From the `Bot` drop dow menu, select the Lex bot we created in the previous setup.
