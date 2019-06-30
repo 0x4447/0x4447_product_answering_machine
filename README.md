@@ -99,8 +99,8 @@ Sadly at the time of writing this Lex and Connect are not supported by CloudForm
 1. Keep the `Data storage` page as is by clicking `Next step`.
 1. Review the setup and once ready click `Create instance`
 1. Click on your new Connect setup, and on the left menu, at the bottom, click `Contact flows`.
-		1. In the `Amazon Lex` section select the region where you created the bot.
-		1. From the `Bot` drop dow menu, select the Lex bot we created in the previous setup.
+	1. In the `Amazon Lex` section select the region where you created the bot.
+	1. From the `Bot` drop dow menu, select the Lex bot we created in the previous setup.
 
 After all of this we have Lex linked with Connect. And this page whee you are on is only used manage the general Connect settings, the whole flow setup of an incoming phone call is done through a separate page. To access this page you have to follow the link you created in section `3`, and use the credentials created in section `4`.
 
