@@ -106,7 +106,14 @@ After all of this we have Lex linked with Connect. And this page whee you are on
 
 ### Amazon Connect Flow
 
-Instructions
+1. Use the URL that you created to access the Connect dashboard.
+1. Once logged in, hover over the 3th icon from the left menu, and select: `Contact flows`.
+1. On the `Contact flows` page, click ` Create contact flow`.
+1. On the new page, name your flow, for example `Offcie`.
+
+At this stage you can download our contact flow that we create from this [URL](). Once you download it, you will have to do some edits to make it works, since you have to replace some ARNs to lambda functions to your owns. Sadly there isn't an automatic way of doing this.
+
+The last thing left is to import the flow: at the top right corner you have the `Save` button, which has an arrow pointing down. Click on it and select `Import flow (beta)`. Select the file, and upload it.
 
 # How to work with this project
 
