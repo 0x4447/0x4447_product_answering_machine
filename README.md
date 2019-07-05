@@ -103,7 +103,7 @@ Sadly at the time of writing this Lex and Connect are not supported by CloudForm
 ### Amazon Connect
 
 1. Go to the [Connect console](https://console.aws.amazon.com/connect/home).
-1. Click the blue `Add an instance` button.
+1. Click the blue `Add an instance` button, or `Get Started`.
 	1. Check `Store users within Amazon Connect`, and write the name for the `Access URL`, and then click `Next step`.
 	1. On the `Create an Administrator` page, fill out the form for a new admin user - this has nothing to do with a IAM user. Once ready click `Next step`.
 	1. On the `Telephony Options` check all the options if you want, then click `Next step`.
@@ -111,7 +111,8 @@ Sadly at the time of writing this Lex and Connect are not supported by CloudForm
 	1. Review the setup and once ready click `Create instance`
 1. Click on your new Connect setup, and on the left menu, at the bottom, click `Contact flows`.
 	1. In the `Amazon Lex` section select the region where you created the bot.
-	1. From the `Bot` drop dow menu, select the Lex bot we created in the previous setup.
+	1. From the `Bot` drop down menu, select the Lex bot we created in the previous setup.
+	1. Click `+ add Lex Bot`.
 
 After all of this we have Lex linked with Connect. And this page whee you are on is only used manage the general Connect settings, the whole flow setup of an incoming phone call is done through a separate page. To access this page you have to follow the link you created in section `3`, and use the credentials created in section `4`.
 
