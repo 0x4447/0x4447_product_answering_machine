@@ -1,4 +1,19 @@
 {
+   "version":"1",
+   "type":"contactFlow",
+   "start":"df229345-1b61-4d3d-bb92-01143d46b574",
+   "metadata":{
+      "name":"Office",
+      "snapToGrid":false,
+      "description":null,
+      "type":"contactFlow",
+      "status":"published",
+      "hash":"f6f138a7919544ffd827e18a4a0cedc68c00d6ae3f5c9ad533f0e65930729e92",
+      "entryPointPosition":{
+         "x":25,
+         "y":4
+      }
+   },
    "modules":[
       {
          "id":"5cea6482-4c5d-48ec-8935-33e92c5fc5d2",
@@ -616,20 +631,5 @@
             }
          }
       }
-   ],
-   "version":"1",
-   "type":"contactFlow",
-   "start":"df229345-1b61-4d3d-bb92-01143d46b574",
-   "metadata":{
-      "entryPointPosition":{
-         "x":25,
-         "y":4
-      },
-      "snapToGrid":false,
-      "name":"Office",
-      "description":null,
-      "type":"contactFlow",
-      "status":"published",
-      "hash":"f6f138a7919544ffd827e18a4a0cedc68c00d6ae3f5c9ad533f0e65930729e92"
-   }
+   ]
 }
