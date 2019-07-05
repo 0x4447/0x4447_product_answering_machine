@@ -21,39 +21,13 @@ On top of this two services, if we add a bunch of Lambda functions, we gain comp
 
 This way we can Ask for the caller name if we don't have it in the database, or greet them with their name if the calling number have a matching name.
 
-
 # DISCLAIMER!
 
 This stack is available to anyone at no cost, but on an as-is basis. 0x4447 LLC is not responsible for damages or costs of any kind that may occur when you use the stack. You take full responsibility when you use it.
 
-# How to deploy
-
-<a target="_blank" href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=zer0x4447-S3-Email&templateURL=https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json">
-<img align="left" style="float: left; margin: 0 10px 0 0;" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png"></a>
-
-All you need to do to deploy this stack is click the button to the left and follow the instructions that CloudFormation provides in your AWS Dashboard. Alternatively you can download the CF file from [here](https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json).
-
-# What will deploy?
-
-![Answering Machine Diagram](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/diagram.png)
-
-The stack takes advantage of AWS S3, AWS SES, AWS Lambda, and the AWS Trigger system to tie everything together. You'll get:
-
-- 4x AWS Lambdas (1x CodeBuild and 1x CodePipeline for each Lambda to support auto-deployment)
-- 1x DynamoDB table
-
-All project resources can be found [here](https://github.com/topics/0x4447-product-answering-machine).
-
-# Auto deploy
-
-The stack is set up in a such a way that any time new code is pushed to a selected branch, the CodePipeline picks up the change and updates the Lambdas for you. These are the available branches:
-
-- **master**: the latest stable code
-- **development**: unstable code that we test in our test environment - we don't recommend that you use this branch
-
 # Manual work
 
-Sadly at the time of writing this Lex and Connect are not supported by CloudFormation, this means that once the stack is deployed you will configure this two services by hand.
+Sadly at the time of writing this Lex and Connect are not supported by CloudFormation, this means that you have to configure this two services first by hand.
 
 ### AWS Lex
 
@@ -114,7 +88,32 @@ Sadly at the time of writing this Lex and Connect are not supported by CloudForm
 	1. From the `Bot` drop down menu, select the Lex bot we created in the previous setup.
 	1. Click `+ add Lex Bot`.
 
-After all of this we have Lex linked with Connect. And this page whee you are on is only used manage the general Connect settings, the whole flow setup of an incoming phone call is done through a separate page. To access this page you have to follow the link you created in section `3`, and use the credentials created in section `4`.
+After all of this we have Lex linked with Connect. Now we can deploy the CloudFormation since we will have all the details necessary to do so.
+
+# CloudFormatin Automation
+
+<a target="_blank" href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=zer0x4447-S3-Email&templateURL=https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json">
+<img align="left" style="float: left; margin: 0 10px 0 0;" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png"></a>
+
+All you need to do to deploy this stack is click the button to the left and follow the instructions that CloudFormation provides in your AWS Dashboard. Alternatively you can download the CF file from [here](https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json).
+
+# What will deploy?
+
+![Answering Machine Diagram](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/diagram.png)
+
+The stack takes advantage of AWS S3, AWS SES, AWS Lambda, and the AWS Trigger system to tie everything together. You'll get:
+
+- 4x AWS Lambdas (1x CodeBuild and 1x CodePipeline for each Lambda to support auto-deployment)
+- 1x DynamoDB table
+
+All project resources can be found [here](https://github.com/topics/0x4447-product-answering-machine).
+
+# Auto deploy
+
+The stack is set up in a such a way that any time new code is pushed to a selected branch, the CodePipeline picks up the change and updates the Lambdas for you. These are the available branches:
+
+- **master**: the latest stable code
+- **development**: unstable code that we test in our test environment - we don't recommend that you use this branch
 
 ### Amazon Connect Flow
 
