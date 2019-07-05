@@ -69,25 +69,36 @@ Sadly at the time of writing this Lex and Connect are not supported by CloudForm
 	1. On the popup select `Create intent`.
 	1. Name it `GetName`
 	1. In the `Slots` section we need first to create a new entry called `first_name`. With a `Slot type` of `AMAZON.US_FIRST_NAME`, and with `Prompt` set as `Can I have your name`.
+	1. Click the + button next to the slot to save it.
 	1. Now that we have the Slot, in the `Sample utterances`, we are going to write a bunch of possible sentences a caller can say. You can come up with more if you'd like:
 		1. `Yes sure my name is ​{first_name}​`
 		1. `I'm ​{first_name}​`
 		1. `My name is ​{first_name}​`
 		1. `​{first_name}​`
-1. We are going to make another Intent, this time called `message`.
+		1. Scroll down to the bottom and click `Save intent`.
+1. We are going to make another Intent, this time called `GetMessage`.
 	1. For the `Slots` we are going to type `message`.
 	1. For the `Slot type` we are going to select: `AMAZON.Festival` because we want the most general type possible, since we want to get the whole voice transcript, and not let Lex try to understand the meaning of what was said.
 	1. For `Prompt`, type anything, since Lex won't be asking the question, we are going to fulfill the intent using our custom Lambda.
 	1. For `Sample utterances`, write just one: ​`{message}​`.
-	1. For `Lambda initialization and validation`, select the Message Lambda, and do the same for ` Fulfillment`, where you select `AWS Lambda function`, and the Message lambda from the drop down.
-	1. On the same page, from the left menu select `Error Handling`.
-		1. For `Clarification prompts`, type something like:
-			1. `Sorry, I didn't hear you.`
-			1. `What's that?`
-			1. `Could you please repeat that?`
-		1. Set the `Maximum number of retries` to 5,
-		1. And for the `Hang-up phrase` write: `Sorry, the connection is to bad. Please go to our contact page to send us an email.`
-1. On the Setting page, go to `Aliases`, and create an alias named `production` and select the latest `Bot version`. This alias is important since it is going to be used by Amazon Connect. This way you can even edit your bot while Connect uses the version you have set, and switch to the new one once you are done testing.
+	1. For `Lambda initialization and validation`, select the Message Lambda, and when the modal drops down, click `Ok`.
+	1. Do the same for `Fulfillment`, where you select `AWS Lambda function`, and the Message lambda from the drop down.
+	1. Scroll down to the bottom and click `Save intent`.
+1. On the same page, from the left menu select `Error Handling`.
+	1. For `Clarification prompts`, type something like:
+		1. `Sorry, I didn't hear you.`
+		1. `What's that?`
+		1. `Could you please repeat that?`
+	1. Set the `Maximum number of retries` to 5,
+	1. And for the `Hang-up phrase` write: `Sorry, the connection is to bad. Please go to our contact page to send us an email.`
+	1. Click the `+` button next to the message.
+	1. Click the `x` button for the default disconnect message.
+1. On the Setting tab, go to `Aliases`, and create an alias named `production` and select the latest `Bot version`. This alias is important for building the our setup.
+1. On the top right corner of the page click `Build`. Once the process is done, you can test your bot, by tying any string that infers your name. In return only your name should be extracted from the message.
+1. The last step is to publish the bot.
+	1. Click `Publish` found in the top right corner next to `Build`
+	1. From the modal, select the alias that we created in the step above.
+	1. Once the process is done, the bot is ready to be used by Connect.
 
 ### Amazon Connect
 
