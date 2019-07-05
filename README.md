@@ -117,7 +117,11 @@ This part of the setup is the most involved since it will require you to edit a 
 
 At this stage you can download our [contact flow that we create](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/call_flow.json). This is the file that you'll have to edit, and replace some ARNs to lambda functions to your owns. Sadly there isn't an automatic way of doing this.
 
-Instructions how to edit the JSON file
+This is a list of places where you have to replace the ARNs:
+
+- modules[1].parameters[0].value = the Arn of the `0x4447_answering_machine_message` lambda
+- modules[15].parameters[0].value = the Arn of the `0x4447_answering_machine_name_save` lambda
+- modules[19].parameters[0].value = the Arn of the `0x4447_answering_machine_name_get` lambda
 
 Once the file is changed you can import the flow: at the top right corner you have the `Save` button, which has an arrow pointing down. Click on it and select `Import flow (beta)`. Select the file, and upload it. Once the flow will show up on the page, **don't forget** to click `Publish`. At this stage we have to attach the flow we made with a phone number. To do so, follow this steps:
 
@@ -128,14 +132,6 @@ Once the file is changed you can import the flow: at the top right corner you ha
 1. Add a simple `Description`
 1. From the `Contact flow / IVR` drop down, select the flow that you created.
 1. Click `Save`.
-
-### Attach a role to Connect
-
-The last part of the setup is to attach the role created by the CloudFormation file to the Connect account you created. This is crucial, because this role will allow Amazon Connect to interact with Lex and the Lambdas. To do so you will have to use the AWS CLI. Once you have it setup, this is the command to run to attach the role:
-
-```
-] aws cli connect ...
-```
 
 # How to work with this project
 
