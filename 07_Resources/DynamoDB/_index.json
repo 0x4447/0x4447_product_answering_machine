@@ -2,7 +2,7 @@
 	"DDBData": {
 		"Type": "AWS::DynamoDB::Table",
 		"Properties": {
-			"TableName": "answering_machine",
+			"TableName": "0x4447_connect_sessions",
 			"AttributeDefinitions": [
 				{
 					"AttributeName": "id",
