@@ -1,0 +1,6 @@
+{
+	"ParamConnectInstanceARN": {
+		"Description": "The ARN of the Connect Instance, that can be found when you click on your Instance Alias.",
+		"Type": "String"
+	}
+}

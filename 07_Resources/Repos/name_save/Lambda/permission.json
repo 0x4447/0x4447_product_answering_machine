@@ -1,10 +1,10 @@
 {
-	"LambdaNameGetPermission": {
+	"LambdaNameSavePermission": {
 		"Type": "AWS::Lambda::Permission",
-		"DependsOn": "LambdaNameGet",
+		"DependsOn": "LambdaNameSave",
 		"Properties": {
 			"Action": "lambda:InvokeFunction",
-			"FunctionName": { "Ref": "LambdaNameGet" },
+			"FunctionName": { "Ref": "LambdaNameSave" },
 			"SourceArn": { "Ref": "ParamConnectInstanceARN" },
 			"Principal": "connect.amazonaws.com"
 		}

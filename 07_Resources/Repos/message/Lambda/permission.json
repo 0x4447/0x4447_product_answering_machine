@@ -1,11 +1,12 @@
 {
-	"S3InboundPermission": {
+	"LambdaMessagePermission": {
 		"Type": "AWS::Lambda::Permission",
 		"DependsOn": "LambdaMessage",
 		"Properties": {
 			"Action": "lambda:InvokeFunction",
 			"FunctionName": { "Ref": "LambdaMessage" },
-			"Principal": "s3.amazonaws.com"
+			"SourceArn": { "Ref": "ParamConnectInstanceARN" },
+			"Principal": "connect.amazonaws.com"
 		}
 	}
 }
