@@ -1,6 +1,0 @@
-{
-	"ParamEmailReplyTo": {
-		"Description": "The email used for the Reply To field, for example: \"First Last\" <name@example.com>",
-		"Type": "String"
-	}
-}

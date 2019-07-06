@@ -1,0 +1,12 @@
+{
+	"LambdaNotificationPermission": {
+		"Type": "AWS::Lambda::Permission",
+		"DependsOn": "LambdaNameSave",
+		"Properties": {
+			"Action": "lambda:InvokeFunction",
+			"FunctionName": { "Ref": "LambdaNotification" },
+			"SourceArn": { "Ref": "ParamConnectInstanceARN" },
+			"Principal": "connect.amazonaws.com"
+		}
+	}
+}

@@ -1,0 +1,8 @@
+{
+	"SNSTopic": {
+		"Type": "AWS::SNS::Topic",
+		"Properties": {
+			"DisplayName": { "Fn::Sub": "${AWS::StackName}" }
+		}
+	}
+}

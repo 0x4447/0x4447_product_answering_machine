@@ -14,9 +14,7 @@
 			"Timeout": 60,
 			"Environment": {
 				"Variables": {
-					"FROM": { "Ref": "ParamEmailFrom" },
-					"TO": { "Ref": "ParamEmailTo" },
-					"REPLY_TO": { "Ref": "ParamEmailReplyTo" }
+					"SNS_TOPIC": { "Ref": "SNSTopic" }
 				}
 			}
 		}
