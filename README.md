@@ -32,9 +32,9 @@ Since we are pushing Connect to the limit there are issues that can't be solved,
 
 This stack is available to anyone at no cost, but on an as-is basis. 0x4447 LLC is not responsible for damages or costs of any kind that may occur when you use the stack. You take full responsibility when you use it.
 
-# Manual work
+# Deploy
 
-Sadly at the time of writing this Lex and Connect are not supported by CloudFormation, this means that you have to configure this two services first by hand.
+This project is described using a CloudFomration file, but sadly Lex and Connect are not yet supported by CloudFormation. before we deploy the stack we need to perform some manual work, so we have all the necessary details for the CF stack itself.
 
 ### AWS Lex
 
@@ -44,7 +44,7 @@ Sadly at the time of writing this Lex and Connect are not supported by CloudForm
 	1. Type the name of your bot.
 	1. Select an `Output voice` that you like. Joanna seams the more natural of them all.
 	1. Set 5 min in the `Session timeout` field.
-	1. And select No for the `COPPA` section.
+	1. And select `No` for the `COPPA` section.
 	1. Click `Create`.
 1. Now, on the new page, click `Create Intent`
 	1. On the popup select `Create intent`.
@@ -95,27 +95,29 @@ Sadly at the time of writing this Lex and Connect are not supported by CloudForm
 	1. From the `Bot` drop down menu, select the Lex bot we created in the previous setup.
 	1. Click `+ add Lex Bot`.
 
-After all of this we have Lex linked with Connect. Now we can deploy the CloudFormation since we will have all the details necessary to do so.
+After all of this is done we have Lex linked with Connect. And we also have the Connect Instance ARN for CloudFormation.
 
-# CloudFormatin Automation
+### CloudFormation
 
 <a target="_blank" href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=zer0x4447-S3-Email&templateURL=https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json">
 <img align="left" style="float: left; margin: 0 10px 0 0;" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png"></a>
 
 All you need to do to deploy this stack is click the button to the left and follow the instructions that CloudFormation provides in your AWS Dashboard. Alternatively you can download the CF file from [here](https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json).
 
-# What will deploy?
+#### What will deploy?
 
 ![Answering Machine Diagram](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/diagram.png)
 
-The stack takes advantage of AWS S3, AWS SES, AWS Lambda, and the AWS Trigger system to tie everything together. You'll get:
+The stack takes advantage of AWS SES, AWS Lambda and DyamoDB. You'll get:
 
 - 4x AWS Lambdas (1x CodeBuild and 1x CodePipeline for each Lambda to support auto-deployment)
 - 1x DynamoDB table
+- 1x SES Topic
+- 1x SES Subscription
 
-All project resources can be found [here](https://github.com/topics/0x4447-product-answering-machine).
+All the project resources can be found [here](https://github.com/topics/0x4447-product-answering-machine).
 
-# Auto deploy
+#### Auto deploy
 
 The stack is set up in a such a way that any time new code is pushed to a selected branch, the CodePipeline picks up the change and updates the Lambdas for you. These are the available branches:
 
@@ -126,7 +128,7 @@ The stack is set up in a such a way that any time new code is pushed to a select
 
 ![Call Flow](https://github.com/0x4447/0x4447_product_answering_machine/blob/assets/call_flow.png)
 
-This part of the setup is the most involved since it will require you to edit a JSON file to update it to your setup. But before we do that, let's start with the basic.
+This part of the setup requires you to edit a JSON file to update it to your setup. But before we do that, let's start with the basic.
 
 1. Use the URL that you created to access the Connect dashboard.
 1. Once logged in, hover over the 3th icon from the left menu, and select: `Contact flows`.
