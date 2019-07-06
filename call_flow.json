@@ -1,635 +1,547 @@
 {
-   "version":"1",
-   "type":"contactFlow",
-   "start":"df229345-1b61-4d3d-bb92-01143d46b574",
-   "metadata":{
-      "name":"Office",
-      "snapToGrid":false,
-      "description":null,
-      "type":"contactFlow",
-      "status":"published",
-      "hash":"f6f138a7919544ffd827e18a4a0cedc68c00d6ae3f5c9ad533f0e65930729e92",
-      "entryPointPosition":{
-         "x":25,
-         "y":4
+  "modules": [
+    {
+      "id": "df229345-1b61-4d3d-bb92-01143d46b574",
+      "type": "SetLoggingBehavior",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "3847123e-cdd1-4a07-ae54-c4c8bc7d710e"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "LoggingBehavior",
+          "value": "Enable"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 229,
+          "y": 42
+        }
       }
-   },
-   "modules":[
-      {
-         "id":"5cea6482-4c5d-48ec-8935-33e92c5fc5d2",
-         "type":"Disconnect",
-         "branches":[
-
-         ],
-         "parameters":[
-
-         ],
-         "metadata":{
-            "position":{
-               "x":1780,
-               "y":620
-            }
-         }
-      },
-      {
-         "id":"7edb4b5d-51d9-4a31-98c1-9c66401d8d2b",
-         "type":"InvokeExternalResource",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"c13f42d8-5a39-4b82-9f2a-f2cfa20c86c5"
-            },
-            {
-               "condition":"Error",
-               "transition":"aadb69d4-b248-4fd7-9f30-85ff88fdfa88"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"FunctionArn",
-               "value":"arn:aws:lambda:us-east-1:239748505547:function:Connect_Voice_Mail"
-            },
-            {
-               "name":"TimeLimit",
-               "value":"3"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":2101,
-               "y":648
-            },
-            "dynamicMetadata":{
-
-            }
-         },
-         "target":"Lambda"
-      },
-      {
-         "id":"c13f42d8-5a39-4b82-9f2a-f2cfa20c86c5",
-         "type":"PlayPrompt",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"aadb69d4-b248-4fd7-9f30-85ff88fdfa88"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Text",
-               "value":"I'll forward the message. Bye",
-               "namespace":null
-            },
-            {
-               "name":"TextToSpeechType",
-               "value":"text"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":2117,
-               "y":884
-            },
-            "useDynamic":false
-         }
-      },
-      {
-         "id":"16db7d57-affd-4389-95da-5bc2c8c9a967",
-         "type":"PlayPrompt",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"8db65353-ddb7-44f5-b577-f3772d158c4a"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Text",
-               "value":"Welcome, thank you for calling zero ex 44 47.",
-               "namespace":null
-            },
-            {
-               "name":"TextToSpeechType",
-               "value":"text"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":874,
-               "y":439
-            },
-            "useDynamic":false
-         }
-      },
-      {
-         "id":"3a5ae2f3-7328-4c07-b86d-9e9a42374905",
-         "type":"SetAttributes",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"b3539579-2f82-436d-968e-2a9ba479b0e6"
-            },
-            {
-               "condition":"Error",
-               "transition":"5cea6482-4c5d-48ec-8935-33e92c5fc5d2"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Attribute",
-               "value":"3000",
-               "key":"sleep",
-               "namespace":null
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":1500,
-               "y":423
-            }
-         }
-      },
-      {
-         "id":"b50ddc13-af36-4ed7-839c-817f1e2b7585",
-         "type":"SetAttributes",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"7edb4b5d-51d9-4a31-98c1-9c66401d8d2b"
-            },
-            {
-               "condition":"Error",
-               "transition":"aadb69d4-b248-4fd7-9f30-85ff88fdfa88"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Attribute",
-               "value":"$.Lex.Slots.message",
-               "key":"Message",
-               "namespace":null
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":2080,
-               "y":411
-            }
-         }
-      },
-      {
-         "id":"aadb69d4-b248-4fd7-9f30-85ff88fdfa88",
-         "type":"Disconnect",
-         "branches":[
-
-         ],
-         "parameters":[
-
-         ],
-         "metadata":{
-            "position":{
-               "x":2366,
-               "y":667
-            }
-         }
-      },
-      {
-         "id":"b3539579-2f82-436d-968e-2a9ba479b0e6",
-         "type":"InvokeExternalResource",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"0f93d943-fbe9-4363-9aa1-4a91b3eebf40"
-            },
-            {
-               "condition":"Error",
-               "transition":"5cea6482-4c5d-48ec-8935-33e92c5fc5d2"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"FunctionArn",
-               "value":"arn:aws:lambda:us-east-1:239748505547:function:Connect_Delay"
-            },
-            {
-               "name":"TimeLimit",
-               "value":"8"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":1524,
-               "y":658
-            },
-            "dynamicMetadata":{
-
-            }
-         },
-         "target":"Lambda"
-      },
-      {
-         "id":"0f93d943-fbe9-4363-9aa1-4a91b3eebf40",
-         "type":"GetUserInput",
-         "branches":[
-            {
-               "condition":"NoMatch",
-               "transition":"b50ddc13-af36-4ed7-839c-817f1e2b7585"
-            },
-            {
-               "condition":"Error",
-               "transition":"aadb69d4-b248-4fd7-9f30-85ff88fdfa88"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Text",
-               "value":"I wasn't able to catch anyone. Live a 15 sec message, and I'll forward it to the right person.",
-               "namespace":null
-            },
-            {
-               "name":"TextToSpeechType",
-               "value":"text"
-            },
-            {
-               "name":"BotName",
-               "value":"Contact_Office"
-            },
-            {
-               "name":"BotAlias",
-               "value":"$LATEST"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":2051,
-               "y":189
-            },
-            "conditionMetadata":[
-
-            ],
-            "useDynamic":false,
-            "dynamicMetadata":{
-
-            }
-         },
-         "target":"Lex"
-      },
-      {
-         "id":"8db65353-ddb7-44f5-b577-f3772d158c4a",
-         "type":"GetUserInput",
-         "branches":[
-            {
-               "condition":"NoMatch",
-               "transition":"ae39d2c6-74c8-4d6b-9c31-e0a26bc9f58f"
-            },
-            {
-               "condition":"Error",
-               "transition":"e50db726-50f4-4b30-8928-aa3cf1fb20a2"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Text",
-               "value":"Could you tell me your name?",
-               "namespace":null
-            },
-            {
-               "name":"TextToSpeechType",
-               "value":"text"
-            },
-            {
-               "name":"BotName",
-               "value":"Contact_Office"
-            },
-            {
-               "name":"BotAlias",
-               "value":"$LATEST"
-            },
-            {
-               "name":"Parameter",
-               "key":"first_name",
-               "value":"$.Attributes.first_name"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":897,
-               "y":644
-            },
-            "conditionMetadata":[
-
-            ],
-            "useDynamic":false,
-            "dynamicMetadata":{
-               "first_name":false
-            }
-         },
-         "target":"Lex"
-      },
-      {
-         "id":"732259ee-b691-4cdb-b8ff-94d23db61e78",
-         "type":"PlayPrompt",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"0a1433ae-2d15-4594-8a0f-938c4107d2d5"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Text",
-               "value":"Hi $.Attributes.first_name, thank you for calling us again.",
-               "namespace":null
-            },
-            {
-               "name":"TextToSpeechType",
-               "value":"text"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":820,
-               "y":206
-            },
-            "useDynamic":false
-         }
-      },
-      {
-         "id":"ae39d2c6-74c8-4d6b-9c31-e0a26bc9f58f",
-         "type":"SetAttributes",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"63151067-e438-484b-b60f-c4e29bb8ffce"
-            },
-            {
-               "condition":"Error",
-               "transition":"e50db726-50f4-4b30-8928-aa3cf1fb20a2"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Attribute",
-               "value":"$.Lex.Slots.first_name",
-               "key":"first_name",
-               "namespace":null
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":921,
-               "y":886
-            }
-         }
-      },
-      {
-         "id":"0a1433ae-2d15-4594-8a0f-938c4107d2d5",
-         "type":"PlayPrompt",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"3a5ae2f3-7328-4c07-b86d-9e9a42374905"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Text",
-               "value":"Let me see if I can find someone in the office.",
-               "namespace":null
-            },
-            {
-               "name":"TextToSpeechType",
-               "value":"text"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":1468,
-               "y":227
-            },
-            "useDynamic":false
-         }
-      },
-      {
-         "id":"e50db726-50f4-4b30-8928-aa3cf1fb20a2",
-         "type":"Disconnect",
-         "branches":[
-
-         ],
-         "parameters":[
-
-         ],
-         "metadata":{
-            "position":{
-               "x":1199,
-               "y":1095
-            }
-         }
-      },
-      {
-         "id":"63151067-e438-484b-b60f-c4e29bb8ffce",
-         "type":"PlayPrompt",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"f87426f4-eea9-4e84-b805-c533975d7056"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Text",
-               "value":"Hi $.Attributes.first_name.",
-               "namespace":null
-            },
-            {
-               "name":"TextToSpeechType",
-               "value":"text"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":925,
-               "y":1111
-            },
-            "useDynamic":false
-         }
-      },
-      {
-         "id":"f87426f4-eea9-4e84-b805-c533975d7056",
-         "type":"InvokeExternalResource",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"0a1433ae-2d15-4594-8a0f-938c4107d2d5"
-            },
-            {
-               "condition":"Error",
-               "transition":"e50db726-50f4-4b30-8928-aa3cf1fb20a2"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"FunctionArn",
-               "value":"arn:aws:lambda:us-east-1:239748505547:function:Connect_Save_Name"
-            },
-            {
-               "name":"TimeLimit",
-               "value":"8"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":935,
-               "y":1299
-            },
-            "dynamicMetadata":{
-
-            }
-         },
-         "target":"Lambda"
-      },
-      {
-         "id":"df229345-1b61-4d3d-bb92-01143d46b574",
-         "type":"SetLoggingBehavior",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"3847123e-cdd1-4a07-ae54-c4c8bc7d710e"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"LoggingBehavior",
-               "value":"Enable"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":229,
-               "y":42
-            }
-         }
-      },
-      {
-         "id":"cdd23b01-66db-4beb-80f5-967f3d7ebea1",
-         "type":"CheckAttribute",
-         "branches":[
-            {
-               "condition":"Evaluate",
-               "conditionType":"Equals",
-               "conditionValue":".true",
-               "transition":"732259ee-b691-4cdb-b8ff-94d23db61e78"
-            },
-            {
-               "condition":"NoMatch",
-               "transition":"16db7d57-affd-4389-95da-5bc2c8c9a967"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Attribute",
-               "value":"$.External.got_name"
-            },
-            {
-               "name":"Namespace",
-               "value":"External"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":236,
-               "y":898
-            },
-            "conditionMetadata":[
-               {
-                  "id":"97f155bf-aa1c-45e0-84b2-d738371d7a31",
-                  "operator":{
-                     "name":"Equals",
-                     "value":"Equals",
-                     "shortDisplay":"="
-                  },
-                  "value":".true"
-               }
-            ]
-         }
-      },
-      {
-         "id":"4b49a2bd-0a1c-4c90-a99d-8c37ee456390",
-         "type":"Disconnect",
-         "branches":[
-
-         ],
-         "parameters":[
-
-         ],
-         "metadata":{
-            "position":{
-               "x":509,
-               "y":684
-            }
-         }
-      },
-      {
-         "id":"3847123e-cdd1-4a07-ae54-c4c8bc7d710e",
-         "type":"InvokeExternalResource",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"f349492b-dd84-4a55-8afb-f87cb59050cc"
-            },
-            {
-               "condition":"Error",
-               "transition":"4b49a2bd-0a1c-4c90-a99d-8c37ee456390"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"FunctionArn",
-               "value":"arn:aws:lambda:us-east-1:239748505547:function:Connect_Get_Name"
-            },
-            {
-               "name":"TimeLimit",
-               "value":"3"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":236,
-               "y":441
-            },
-            "dynamicMetadata":{
-
-            }
-         },
-         "target":"Lambda"
-      },
-      {
-         "id":"f349492b-dd84-4a55-8afb-f87cb59050cc",
-         "type":"SetAttributes",
-         "branches":[
-            {
-               "condition":"Success",
-               "transition":"cdd23b01-66db-4beb-80f5-967f3d7ebea1"
-            },
-            {
-               "condition":"Error",
-               "transition":"4b49a2bd-0a1c-4c90-a99d-8c37ee456390"
-            }
-         ],
-         "parameters":[
-            {
-               "name":"Attribute",
-               "value":"first_name",
-               "key":"first_name",
-               "namespace":"External"
-            }
-         ],
-         "metadata":{
-            "position":{
-               "x":236,
-               "y":673
-            }
-         }
+    },
+    {
+      "id": "4b49a2bd-0a1c-4c90-a99d-8c37ee456390",
+      "type": "Disconnect",
+      "branches": [],
+      "parameters": [],
+      "metadata": {
+        "position": {
+          "x": 509,
+          "y": 684
+        }
       }
-   ]
+    },
+    {
+      "id": "3847123e-cdd1-4a07-ae54-c4c8bc7d710e",
+      "type": "InvokeExternalResource",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "f349492b-dd84-4a55-8afb-f87cb59050cc"
+        },
+        {
+          "condition": "Error",
+          "transition": "4b49a2bd-0a1c-4c90-a99d-8c37ee456390"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "FunctionArn",
+          "value": "arn:aws:lambda:us-east-1:718280524074:function:0x4447_answering_machine_name_get",
+          "namespace": null
+        },
+        {
+          "name": "TimeLimit",
+          "value": "3"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 236,
+          "y": 441
+        },
+        "dynamicMetadata": {},
+        "useDynamic": false
+      },
+      "target": "Lambda"
+    },
+    {
+      "id": "f349492b-dd84-4a55-8afb-f87cb59050cc",
+      "type": "SetAttributes",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "cdd23b01-66db-4beb-80f5-967f3d7ebea1"
+        },
+        {
+          "condition": "Error",
+          "transition": "4b49a2bd-0a1c-4c90-a99d-8c37ee456390"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Attribute",
+          "value": "first_name",
+          "key": "first_name",
+          "namespace": "External"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 236,
+          "y": 673
+        }
+      }
+    },
+    {
+      "id": "cdd23b01-66db-4beb-80f5-967f3d7ebea1",
+      "type": "CheckAttribute",
+      "branches": [
+        {
+          "condition": "Evaluate",
+          "conditionType": "Equals",
+          "conditionValue": ".true",
+          "transition": "732259ee-b691-4cdb-b8ff-94d23db61e78"
+        },
+        {
+          "condition": "NoMatch",
+          "transition": "16db7d57-affd-4389-95da-5bc2c8c9a967"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Attribute",
+          "value": "$.External.got_name"
+        },
+        {
+          "name": "Namespace",
+          "value": "External"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 236,
+          "y": 898
+        },
+        "conditionMetadata": [
+          {
+            "id": "c1dbaba9-ad9d-4651-8407-3b932392d41f",
+            "operator": {
+              "name": "Equals",
+              "value": "Equals",
+              "shortDisplay": "="
+            },
+            "value": ".true"
+          }
+        ]
+      }
+    },
+    {
+      "id": "16db7d57-affd-4389-95da-5bc2c8c9a967",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "8db65353-ddb7-44f5-b577-f3772d158c4a"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Welcome, thank you for calling zero ex 44 47.",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 883,
+          "y": 287
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "63151067-e438-484b-b60f-c4e29bb8ffce",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "f87426f4-eea9-4e84-b805-c533975d7056"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Hi $.Attributes.first_name.",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 897,
+          "y": 894
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "0f93d943-fbe9-4363-9aa1-4a91b3eebf40",
+      "type": "GetUserInput",
+      "branches": [
+        {
+          "condition": "NoMatch",
+          "transition": "b50ddc13-af36-4ed7-839c-817f1e2b7585"
+        },
+        {
+          "condition": "Error",
+          "transition": "aadb69d4-b248-4fd7-9f30-85ff88fdfa88"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "I wasn't able to catch anyone. Live a 15 seconds message, and I'll forward it to the right person.",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        },
+        {
+          "name": "BotName",
+          "value": "Office"
+        },
+        {
+          "name": "BotAlias",
+          "value": "$LATEST"
+        },
+        {
+          "name": "BotRegion",
+          "value": "us-east-1"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 1464,
+          "y": 288
+        },
+        "conditionMetadata": [],
+        "useDynamic": false,
+        "dynamicMetadata": {}
+      },
+      "target": "Lex"
+    },
+    {
+      "id": "732259ee-b691-4cdb-b8ff-94d23db61e78",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "0a1433ae-2d15-4594-8a0f-938c4107d2d5"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Hi $.Attributes.first_name, thank you for calling us again.",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 837,
+          "y": 47
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "0a1433ae-2d15-4594-8a0f-938c4107d2d5",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "0f93d943-fbe9-4363-9aa1-4a91b3eebf40"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Let me see if I can find someone in the office.",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 1237,
+          "y": 116
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "ae39d2c6-74c8-4d6b-9c31-e0a26bc9f58f",
+      "type": "SetAttributes",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "63151067-e438-484b-b60f-c4e29bb8ffce"
+        },
+        {
+          "condition": "Error",
+          "transition": "e50db726-50f4-4b30-8928-aa3cf1fb20a2"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Attribute",
+          "value": "$.Lex.Slots.first_name",
+          "key": "first_name",
+          "namespace": null
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 895,
+          "y": 675
+        }
+      }
+    },
+    {
+      "id": "8db65353-ddb7-44f5-b577-f3772d158c4a",
+      "type": "GetUserInput",
+      "branches": [
+        {
+          "condition": "NoMatch",
+          "transition": "ae39d2c6-74c8-4d6b-9c31-e0a26bc9f58f"
+        },
+        {
+          "condition": "Error",
+          "transition": "e50db726-50f4-4b30-8928-aa3cf1fb20a2"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "Could you tell me your name?",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        },
+        {
+          "name": "BotName",
+          "value": "Office"
+        },
+        {
+          "name": "BotAlias",
+          "value": "$LATEST"
+        },
+        {
+          "name": "BotRegion",
+          "value": "us-east-1"
+        },
+        {
+          "name": "Parameter",
+          "key": "first_name",
+          "value": "$.Attributes.first_name"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 895,
+          "y": 461
+        },
+        "conditionMetadata": [],
+        "useDynamic": false,
+        "dynamicMetadata": {
+          "first_name": false
+        }
+      },
+      "target": "Lex"
+    },
+    {
+      "id": "f87426f4-eea9-4e84-b805-c533975d7056",
+      "type": "InvokeExternalResource",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "0a1433ae-2d15-4594-8a0f-938c4107d2d5"
+        },
+        {
+          "condition": "Error",
+          "transition": "e50db726-50f4-4b30-8928-aa3cf1fb20a2"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "FunctionArn",
+          "value": "arn:aws:lambda:us-east-1:718280524074:function:0x4447_answering_machine_name_save",
+          "namespace": null
+        },
+        {
+          "name": "TimeLimit",
+          "value": "8"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 903,
+          "y": 1071
+        },
+        "dynamicMetadata": {},
+        "useDynamic": false
+      },
+      "target": "Lambda"
+    },
+    {
+      "id": "e50db726-50f4-4b30-8928-aa3cf1fb20a2",
+      "type": "Disconnect",
+      "branches": [],
+      "parameters": [],
+      "metadata": {
+        "position": {
+          "x": 1164,
+          "y": 1196
+        }
+      }
+    },
+    {
+      "id": "c13f42d8-5a39-4b82-9f2a-f2cfa20c86c5",
+      "type": "PlayPrompt",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "aadb69d4-b248-4fd7-9f30-85ff88fdfa88"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Text",
+          "value": "I'll forward the message. Bye",
+          "namespace": null
+        },
+        {
+          "name": "TextToSpeechType",
+          "value": "text"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 1473,
+          "y": 951
+        },
+        "useDynamic": false
+      }
+    },
+    {
+      "id": "aadb69d4-b248-4fd7-9f30-85ff88fdfa88",
+      "type": "Disconnect",
+      "branches": [],
+      "parameters": [],
+      "metadata": {
+        "position": {
+          "x": 1760,
+          "y": 644
+        }
+      }
+    },
+    {
+      "id": "b50ddc13-af36-4ed7-839c-817f1e2b7585",
+      "type": "SetAttributes",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "7edb4b5d-51d9-4a31-98c1-9c66401d8d2b"
+        },
+        {
+          "condition": "Error",
+          "transition": "aadb69d4-b248-4fd7-9f30-85ff88fdfa88"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "Attribute",
+          "value": "$.Lex.Slots.message",
+          "key": "Message",
+          "namespace": null
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 1468,
+          "y": 506
+        }
+      }
+    },
+    {
+      "id": "7edb4b5d-51d9-4a31-98c1-9c66401d8d2b",
+      "type": "InvokeExternalResource",
+      "branches": [
+        {
+          "condition": "Success",
+          "transition": "c13f42d8-5a39-4b82-9f2a-f2cfa20c86c5"
+        },
+        {
+          "condition": "Error",
+          "transition": "aadb69d4-b248-4fd7-9f30-85ff88fdfa88"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "FunctionArn",
+          "value": "arn:aws:lambda:us-east-1:718280524074:function:0x4447_answering_machine_notification",
+          "namespace": null
+        },
+        {
+          "name": "TimeLimit",
+          "value": "3"
+        }
+      ],
+      "metadata": {
+        "position": {
+          "x": 1472,
+          "y": 730
+        },
+        "dynamicMetadata": {},
+        "useDynamic": false
+      },
+      "target": "Lambda"
+    }
+  ],
+  "version": "1",
+  "type": "contactFlow",
+  "start": "df229345-1b61-4d3d-bb92-01143d46b574",
+  "metadata": {
+    "entryPointPosition": {
+      "x": 25,
+      "y": 4
+    },
+    "snapToGrid": false,
+    "name": "Office",
+    "description": null,
+    "type": "contactFlow",
+    "status": "published",
+    "hash": "8936d85aee4da94afae1e34587668f3ee89c021a1e9a2ddb0c2a129f9e774c19"
+  }
 }
