@@ -139,9 +139,9 @@ At this stage you can download our [contact flow that we create](https://raw.git
 
 This is a list of places where you have to replace the ARNs:
 
-- modules[1].parameters[0].value = the Arn of the `0x4447_answering_machine_message` lambda
-- modules[15].parameters[0].value = the Arn of the `0x4447_answering_machine_name_save` lambda
-- modules[19].parameters[0].value = the Arn of the `0x4447_answering_machine_name_get` lambda
+- modules[2].parameters[0].value = the Arn of the `0x4447_answering_machine_name_get` lambda
+- modules[12].parameters[0].value = the Arn of the `0x4447_answering_machine_name_save` lambda
+- modules[16].parameters[0].value = the Arn of the `0x4447_answering_machine_notification` lambda
 
 Once the file is changed you can import the flow: at the top right corner you have the `Save` button, which has an arrow pointing down. Click on it and select `Import flow (beta)`. Select the file, and upload it. Once the flow will show up on the page, **don't forget** to click `Publish`. At this stage we have to attach the flow we made with a phone number. To do so, follow this steps:
 
