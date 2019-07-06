@@ -21,6 +21,13 @@ On top of this two services, if we add a bunch of Lambda functions, we gain comp
 
 This way we can Ask for the caller name if we don't have it in the database, or greet them with their name if the calling number have a matching name.
 
+# Known Issues
+
+Since we are pushing Connect to the limit there are issues that can't be solved, or would require more code to solve, which would be an over kill for this type of project. Regardless bellow is a list of those issues:
+
+- There isn't a delay after the "I'm looking for...". Since there isn't a delay block in connect. You could solve this with a Lambda and a timeout.
+- More often then not, Lex will struggle to get the message at the end of the flow. Since there isn't a general intent type that would just accept whatever is said. Lex is designed to find out meaning in a sentence. This could be solved only by AWS.
+
 # DISCLAIMER!
 
 This stack is available to anyone at no cost, but on an as-is basis. 0x4447 LLC is not responsible for damages or costs of any kind that may occur when you use the stack. You take full responsibility when you use it.
