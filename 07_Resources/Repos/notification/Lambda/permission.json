@@ -1,7 +1,7 @@
 {
 	"LambdaNotificationPermission": {
 		"Type": "AWS::Lambda::Permission",
-		"DependsOn": "LambdaNameSave",
+		"DependsOn": "LambdaNotification",
 		"Properties": {
 			"Action": "lambda:InvokeFunction",
 			"FunctionName": { "Ref": "LambdaNotification" },
