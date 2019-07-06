@@ -153,6 +153,17 @@ Once the file is changed you can import the flow: at the top right corner you ha
 1. From the `Contact flow / IVR` drop down, select the flow that you created.
 1. Click `Save`.
 
+# Pricing
+
+All resources deployed via this stack will potentially cost you money. But you'd have to do the following for this to happen:
+
+- Invoke Lambdas over 1,000,000 times a month
+- Send and receive over 1000 emails a month
+- Exceed 100 build minutes on CodeBuild
+- $1 per active CodePipeline (must run at least once a month to be considered active)
+
+The only payment you'll encounter from Day One is with Connect, since they bill per minutes of use, check their [pricing](https://aws.amazon.com/connect/pricing/) page to get an idea of costs.
+
 # How to work with this project
 
 When you want to deploy the stack, the only file you should be interested in is the `CloudFormation.json` file. If you'd like to modify the stack, we recommend that you use the [Grapes framework](https://github.com/0x4447/0x4447-cli-node-grapes), which was designed to make it easier to work with the CloudFormation file. If you'd like to keep your sanity, never edit the main CF file 🤪.
