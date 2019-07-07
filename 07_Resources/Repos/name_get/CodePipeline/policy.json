@@ -1,10 +1,10 @@
 {
-	"PipelineInboundPolicy": {
+	"PipelineNameGetPolicy": {
 		"Type": "AWS::IAM::Policy",
 		"Properties": {
 			"PolicyName": "default",
 			"Roles": [
-				{ "Ref": "PipelineInboundRole" }
+				{ "Ref": "PipelineNameGetRole" }
 			],
 			"PolicyDocument": {
 				"Version": "2012-10-17",

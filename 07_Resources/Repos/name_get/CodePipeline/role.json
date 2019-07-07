@@ -1,5 +1,5 @@
 {
-	"PipelineInboundRole": {
+	"PipelineNameGetRole": {
 		"Type": "AWS::IAM::Role",
 		"Properties": {
 			"RoleName": "0x4447_answering_machine_name_get-codepipeline",
