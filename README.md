@@ -158,7 +158,8 @@ Once the file is changed you can import the flow: at the top right corner you ha
 All resources deployed via this stack will potentially cost you money. But you'd have to do the following for this to happen:
 
 - Invoke Lambdas over 1,000,000 times a month
-- Send and receive over 1000 emails a month
+- Send over 1000 SNS emails a month
+- Send over 1 GB of data a month through SNS
 - Exceed 100 build minutes on CodeBuild
 - $1 per active CodePipeline (must run at least once a month to be considered active)
 
