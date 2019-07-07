@@ -1,0 +1,6 @@
+{
+	"OutLambdaNotification": {
+		"Value": { "Fn::GetAtt": ["LambdaNotification", "Arn"]},
+		"Description": "The ARN of the Lambda."
+	}
+}

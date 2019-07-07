@@ -1,0 +1,6 @@
+{
+	"OutLambdaNameGet": {
+		"Value": { "Fn::GetAtt": ["LambdaNameGet", "Arn"]},
+		"Description": "The ARN of the Lambda."
+	}
+}
