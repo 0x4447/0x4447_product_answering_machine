@@ -41,7 +41,7 @@ This project is described using a CloudFomration file, but sadly Lex and Connect
 1. Go to the [Lex console](https://console.aws.amazon.com/lex/home).
 1. Click the blue button `Create`.
 	1. Select `Custom bot`.
-	1. Type the name of your bot.
+	1. Type `Office` as the name of your bot.
 	1. Select an `Output voice` that you like. Joanna seams the more natural of them all.
 	1. Set 5 min in the `Session timeout` field.
 	1. And select `No` for the `COPPA` section.
@@ -61,16 +61,13 @@ This project is described using a CloudFomration file, but sadly Lex and Connect
 	1. For the `Slots` we are going to type `message`.
 	1. For the `Slot type` we are going to select: `AMAZON.Festival` because we want the most general type possible, since we want to get the whole voice transcript, and not let Lex try to understand the meaning of what was said.
 	1. For `Prompt`, type anything, since Lex won't be asking the question, we are going to fulfill the intent using our custom Lambda.
-	1. For `Sample utterances`, write just one: ​`{message}​`.
-	1. For `Lambda initialization and validation`, select the Message Lambda, and when the modal drops down, click `Ok`.
-	1. Do the same for `Fulfillment`, where you select `AWS Lambda function`, and the Message lambda from the drop down.
+	1. Click the + button next to the slot to save it.
 	1. Scroll down to the bottom and click `Save intent`.
 1. On the same page, from the left menu select `Error Handling`.
 	1. For `Clarification prompts`, type something like:
 		1. `Sorry, I didn't hear you.`
 		1. `What's that?`
-		1. `Could you please repeat that?`
-	1. Set the `Maximum number of retries` to 5,
+	1. Set the `Maximum number of retries` to 3,
 	1. And for the `Hang-up phrase` write: `Sorry, the connection is to bad. Please go to our contact page to send us an email.`
 	1. Click the `+` button next to the message.
 	1. Click the `x` button for the default disconnect message.
@@ -124,6 +121,21 @@ The stack is set up in a such a way that any time new code is pushed to a select
 - **master**: the latest stable code
 - **development**: unstable code that we test in our test environment - we don't recommend that you use this branch
 
+### AWS Lex Update
+
+Now that we have the stack deployed we have to go back for a moment to Lex to set one of the deployed lambda to process the intent.
+
+1. Go to the [Lex console](https://console.aws.amazon.com/lex/home).
+1. Click on the `Offcie` bot that we created.
+1. For the Intent, click on the `GetMessage`
+1. In the `Lambda initialization and validation` section:
+	1. Check `Initialization and validation code hook`
+	1. From the drop down bellow, select the Message Lambda, and when the modal drops down, click `Ok`.
+1. For the `Fulfillment` section bellow:
+	1. Select `AWS Lambda function`
+	1. From the drop down bellow, select the Message Lambda.
+1. Scroll down to the bottom and click `Save intent`.
+
 ### Amazon Connect Flow
 
 ![Call Flow](https://github.com/0x4447/0x4447_product_answering_machine/blob/assets/call_flow.png)
@@ -135,13 +147,7 @@ This part of the setup requires you to edit a JSON file to update it to your set
 1. On the `Contact flows` page, click ` Create contact flow`.
 1. On the new page, name your flow, for example `Offcie`.
 
-At this stage you can download our [contact flow that we create](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/call_flow.json). This is the file that you'll have to edit, and replace some ARNs to lambda functions to your owns. Sadly there isn't an automatic way of doing this.
-
-This is a list of places where you have to replace the ARNs:
-
-- modules[2].parameters[0].value = the Arn of the `0x4447_answering_machine_name_get` lambda
-- modules[12].parameters[0].value = the Arn of the `0x4447_answering_machine_name_save` lambda
-- modules[16].parameters[0].value = the Arn of the `0x4447_answering_machine_notification` lambda
+At this stage you can download our [contact flow that we create](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/call_flow.json). This is the file that you'll have to edit, and replace some ARNs of the lambda functions to your owns. Sadly there isn't an automatic way of doing this. You can find the ARNs in the output section of the deployed stack in CloudFormation.
 
 Once the file is changed you can import the flow: at the top right corner you have the `Save` button, which has an arrow pointing down. Click on it and select `Import flow (beta)`. Select the file, and upload it. Once the flow will show up on the page, **don't forget** to click `Publish`. At this stage we have to attach the flow we made with a phone number. To do so, follow this steps:
 
