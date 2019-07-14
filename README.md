@@ -1,40 +1,41 @@
 # ☎️ Answering Machine
 
-This is a small demo which tray's to simulate an automated answering machine build on top of Amazon Connect and AWS Lex. Basically this stack pushes to the limit what you can do with Amazon Connect, since Connect was never designed to a scnraio like this, But since at 0x4447 we do like to test the limits of what the cloud has to offer - we did it anyway, to see where the stack brakes. Enjoy the read.
+This small demo tries to simulate an automated answering machine built on top of Amazon Connect and AWS Lex. The stack basically pushes what you can do with Amazon Connect to the limit because Connect was never designed to be used in a scenario like this. But we do like to test the limits of what the cloud has to offer here at 0x4447, so we did it anyway, just to see where the stack would break. So enjoy the read.
 
 # Overview
 
 ### AWS Lex
 
-Lex is the AWS service that powers Amazon Alexa, a Machine Learning model that tries to understand the human voice by extracting the intent in the detected voice. The result can be received by a AWS Lambda, or directivity sent back to Amazon Connect. This allows us to create dynamic call flow based on what a user says back.
+Lex is the AWS service that powers Amazon Alexa, a Machine Learning model designed to understand the human voice by extracting the intent in the detected voice.
+The service also allows interfacing with AWS Lambda to control how Lex processes the intents.
 
 ### Amazon Connect
 
-Is a virtual call center service, that allows you co create phone call flows based on the user input, time of the day, active agents and more. This means that when someone calls a phone number that you bought, you can screen the caller with a basic number wall where they chose the right option for them. Or if we combine Connect with Lex, the caller can actually talk back, based on questions that we ask them.
+Amazon Connect is a virtual call center service we can use to create phone call flows based on user input, time of day, active agents, and more. This means that when someone calls a phone number we've bought, we can screen the caller with a basic number wall of options the caller can choose from. Or, if Connect is combined with Lex, the caller can talk back based on questions asked.
 
-# All together
+# All Together
 
-On top of this two services, if we add a bunch of Lambda functions, we gain complete control over Lex and Connect, and can:
+In addition to these two services, we can add a number of Lambda functions to gain complete control over Lex and Connect. We can do the following:
 
-- intercept actions from Lex, and
-- get notified by Connect of all the interactions with the caller.
+- Intercept actions from Lex
+- Receive notifications from Connect about all interactions with the caller
 
-This way we can Ask for the caller name if we don't have it in the database, or greet them with their name if the calling number have a matching name.
+This enables us to ask for the caller's name if it doesn't appear in the database or use the caller's name in greeting if the calling number has a matching name.
 
 # Known Issues
 
-Since we are pushing Connect to the limit there are issues that can't be solved, or would require more code to solve, which would be an over kill for this type of project. Regardless bellow is a list of those issues:
+We're pushing Connect to the limit, so there will be issues that can't be solved and issues that require more code to solve, which would lead to overkill for this type of project. Regardless, those issues are listed below:
 
-- There isn't a delay after the "I'm looking for...". Since there isn't a delay block in connect. You could solve this with a Lambda and a timeout.
-- More often then not, Lex will struggle to get the message at the end of the flow. Since there isn't a general intent type that would just accept whatever is said. Lex is designed to find out meaning in a sentence. This could be solved only by AWS.
+- There isn't a delay after the "I'm looking for..." since there isn't a delay block in connect. You could solve this with a Lambda and a timeout.
+- More often than not, Lex will struggle to get the message at the end of the flow because there isn't a general intent type that will just accept whatever is said. Lex is designed to determine the meaning of a sentence. The only way to solve this would be for AWS to add a new slot that just transcribes what is said.
 
 # DISCLAIMER!
 
-This stack is available to anyone at no cost, but on an as-is basis. 0x4447 LLC is not responsible for damages or costs of any kind that may occur when you use the stack. You take full responsibility when you use it.
+This stack is available to anyone at no cost, but on an as-is basis. 0x4447, LLC is not responsible for damages or costs of any kind that may occur when you use the stack. You take full responsibility when you use it.
 
 # Deploy
 
-This project is described using a CloudFomration file, but sadly Lex and Connect are not yet supported by CloudFormation. before we deploy the stack we need to perform some manual work, so we have all the necessary details for the CF stack itself.
+This project is described using a CloudFormation file. Sadly, Lex and Connect are not yet supported by CloudFormation, and before deploying the stack, we need to perform some manual tasks to gather all necessary details for the CF stack itself.
 
 ### AWS Lex
 
@@ -42,134 +43,135 @@ This project is described using a CloudFomration file, but sadly Lex and Connect
 1. Click the blue button `Create`.
 	1. Select `Custom bot`.
 	1. Type `Office` as the name of your bot.
-	1. Select an `Output voice` that you like. Joanna seams the more natural of them all.
-	1. Set 5 min in the `Session timeout` field.
-	1. And select `No` for the `COPPA` section.
+	1. Select your favorite `Output voice`. Joanna seems to be the most natural-sounding of them all.
+	1. Set five minutes in the `Session timeout` field.
+	1. Select `No` in the `COPPA` section.
 	1. Click `Create`.
-1. Now, on the new page, click `Create Intent`
-	1. On the popup select `Create intent`.
+1. On the new page, click `Create Intent`.
+	1. On the pop-up, select `Create intent`.
 	1. Name it `GetName`
-	1. In the `Slots` section we need first to create a new entry called `first_name`. With a `Slot type` of `AMAZON.US_FIRST_NAME`, and with `Prompt` set as `Can I have your name`.
-	1. Click the + button next to the slot to save it.
-	1. Now that we have the Slot, in the `Sample utterances`, we are going to write a bunch of possible sentences a caller can say. You can come up with more if you'd like:
+	1. In the `Slots` section, we first need to create a new entry called `first_name` with a `Slot type` of `AMAZON.US_FIRST_NAME` and a `Prompt` set as `Can I have your name`.
+	1. Click the `+` button next to the slot to save it.
+	1. Now that we have the Slot, we'll write some possible sentences a caller might use. You can come up with more if you like, but here are a few:
 		1. `Yes sure my name is ​{first_name}​`
 		1. `I'm ​{first_name}​`
 		1. `My name is ​{first_name}​`
 		1. `​{first_name}​`
 		1. Scroll down to the bottom and click `Save intent`.
-1. We are going to make another Intent, this time called `GetMessage`.
-	1. For the `Slots` we are going to type `message`.
-	1. For the `Slot type` we are going to select: `AMAZON.Festival` because we want the most general type possible, since we want to get the whole voice transcript, and not let Lex try to understand the meaning of what was said.
-	1. For `Prompt`, type anything, since Lex won't be asking the question, we are going to fulfill the intent using our custom Lambda.
-	1. Click the + button next to the slot to save it.
+1. We're going to make another Intent called `GetMessage`.
+	1. For the `Slots`, type `message`.
+	1. For the `Slot type`, select `AMAZON.Festival`. We want the most general type possible, because we want to get the entire voice transcript rather than letting Lex try to understand the meaning of what's said.
+	1. For `Prompt`, type anything. Lex won't be asking the question, our lambda will.
+	1. Click the `+` button next to the slot to save it.
 	1. Scroll down to the bottom and click `Save intent`.
-1. On the same page, from the left menu select `Error Handling`.
+1. On the same page, select `Error Hanling` from the left menu.
 	1. For `Clarification prompts`, type something like:
 		1. `Sorry, I didn't hear you.`
 		1. `What's that?`
-	1. Set the `Maximum number of retries` to 3,
-	1. And for the `Hang-up phrase` write: `Sorry, the connection is to bad. Please go to our contact page to send us an email.`
+	1. Set the `Maximum number of retries` to three.
+	1. For the `Hang-up phrase`, write: `Sorry, the connection is bad. Please go to our contact page to send us an email.`
 	1. Click the `+` button next to the message.
 	1. Click the `x` button for the default disconnect message.
-1. On the Setting tab, go to `Aliases`, and create an alias named `production` and select the latest `Bot version`. This alias is important for building the our setup.
-1. On the top right corner of the page click `Build`. Once the process is done, you can test your bot, by tying any string that infers your name. In return only your name should be extracted from the message.
+1. On the Settings tab, go to `Aliases` and create an alias named `production`. Then select the latest `Bot version`. This alias is important for building our setup.
+1. On the page's top right corner, click `Build`. Once the process is done, you can test your bot by tying any string that infers your name. In return, only your name should be extracted from the message.
 1. The last step is to publish the bot.
-	1. Click `Publish` found in the top right corner next to `Build`
+	1. Click `Publish` at the top right corner next to `Build`.
 	1. From the modal, select the alias that we created in the step above.
 	1. Once the process is done, the bot is ready to be used by Connect.
 
 ### Amazon Connect
 
 1. Go to the [Connect console](https://console.aws.amazon.com/connect/home).
-1. Click the blue `Add an instance` button, or `Get Started`.
-	1. Check `Store users within Amazon Connect`, and write the name for the `Access URL`, and then click `Next step`.
-	1. On the `Create an Administrator` page, fill out the form for a new admin user - this has nothing to do with a IAM user. Once ready click `Next step`.
-	1. On the `Telephony Options` check all the options if you want, then click `Next step`.
+1. Click the blue `Add an instance` button or `Get Started`.
+	1. Check `Store users within Amazon Connect`, write the name for the `Access URL`, and click `Next step`.
+	1. On the `Create an Administrator` page, fill out the form for a new admin user. This has nothing to do with a IAM user. Once ready, click `Next step`.
+	1. On `Telephony Options`, check all options if you like, then click `Next step`.
 	1. Keep the `Data storage` page as is by clicking `Next step`.
-	1. Review the setup and once ready click `Create instance`
-1. Click on your new Connect setup, and on the left menu, at the bottom, click `Contact flows`.
-	1. In the `Amazon Lex` section select the region where you created the bot.
-	1. From the `Bot` drop down menu, select the Lex bot we created in the previous setup.
+	1. Review the setup and click `Create instance` when ready.
+1. Click on your new Connect setup and click `Contact flows` at the bottom of the left menu.
+	1. In the `Amazon Lex` section, select the region where you created the bot.
+	1. From the `Bot` drop-down menu, select the Lex bot we created in the previous setup.
 	1. Click `+ add Lex Bot`.
 
-After all of this is done we have Lex linked with Connect. And we also have the Connect Instance ARN for CloudFormation.
+When this is done, we have Lex linked with Connect and the Connect Instance ARN for CloudFormation.
 
 ### CloudFormation
 
 <a target="_blank" href="https://console.aws.amazon.com/cloudformation/home#/stacks/new?stackName=zer0x4447-Answering-Machine&templateURL=https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json">
 <img align="left" style="float: left; margin: 0 10px 0 0;" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png"></a>
 
-All you need to do to deploy this stack is click the button to the left and follow the instructions that CloudFormation provides in your AWS Dashboard. Alternatively you can download the CF file from [here](https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json).
+To deploy this stack, all you need to do is click the button to the left and follow the instructions that CloudFormation provides in your AWS Dashboard. Alternatively, you can download the CF file from [here](https://s3.amazonaws.com/0x4447-drive-cloudformation/answering-machine.json).
 
-#### What will deploy?
+#### What Will Deploy?
 
 ![Answering Machine Diagram](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/diagram.png)
 
-The stack takes advantage of AWS SES, AWS Lambda and DyamoDB. You'll get:
+The stack takes advantage of AWS SES, AWS Lambda, and DyamoDB. You'll get:
 
-- 4x AWS Lambdas (1x CodeBuild and 1x CodePipeline for each Lambda to support auto-deployment)
+- 4x AWS Lambda (1x CodeBuild and 1x CodePipeline for each Lambda to support auto-deployment)
 - 1x DynamoDB table
 - 1x SES Topic
 - 1x SES Subscription
 
-All the project resources can be found [here](https://github.com/topics/0x4447-product-answering-machine).
+All project resources can be found [here](https://github.com/topics/0x4447-product-answering-machine).
 
-#### Auto deploy
+#### Auto Deploy
 
-The stack is set up in a such a way that any time new code is pushed to a selected branch, the CodePipeline picks up the change and updates the Lambdas for you. These are the available branches:
+The stack is set up in a such a way that when new code is pushed to a selected branch, the CodePipeline picks up the change and updates the Lambdas for you. These are the available branches:
 
 - **master**: the latest stable code
 - **development**: unstable code that we test in our test environment - we don't recommend that you use this branch
 
 ### AWS Lex Update
 
-Now that we have the stack deployed we have to go back for a moment to Lex to set one of the deployed lambda to process the intent.
+Now that we've deployed the stack, we have to go back to Lex for a moment to set one of the deployed Lambda to process the intent.
 
 1. Go to the [Lex console](https://console.aws.amazon.com/lex/home).
-1. Click on the `Offcie` bot that we created.
-1. For the Intent, click on the `GetMessage`
+1. Click on the `Offcie` bot we previously created.
+1. For the Intent, click on the `GetMessage`.
 1. In the `Lambda initialization and validation` section:
-	1. Check `Initialization and validation code hook`
-	1. From the drop down bellow, select the Message Lambda, and when the modal drops down, click `Ok`.
-1. For the `Fulfillment` section bellow:
-	1. Select `AWS Lambda function`
-	1. From the drop down bellow, select the Message Lambda.
+	1. Check `Initialization and validation code hook`.
+	1. From the drop down bellow, select the Message Lambda, and click `Ok` when the modal drops down.
+1. For the `Fulfillment` section below:
+	1. Select `AWS Lambda function`.
+	1. From the drop down below, select the Message Lambda.
 1. Scroll down to the bottom and click `Save intent`.
 
 ### Amazon Connect Flow
 
 ![Call Flow](https://github.com/0x4447/0x4447_product_answering_machine/blob/assets/call_flow.png)
 
-This part of the setup requires you to edit a JSON file to update it to your setup. But before we do that, let's start with the basic.
+This part of the setup requires that you edit a JSON file to update it to your setup. But before we do that, let's start with the basics.
 
-1. Use the URL that you created to access the Connect dashboard.
-1. Once logged in, hover over the 3th icon from the left menu, and select: `Contact flows`.
-1. On the `Contact flows` page, click ` Create contact flow`.
-1. On the new page, name your flow, for example `Offcie`.
+1. Use the URL you created to access the Connect dashboard.
+2. Once logged in, hover over the third icon from the left menu and select `Contact flows`.
+3. On the `Contact flows` page, click `Create contact flow`.
+4. On the new page, name your flow (for example, `Office`).
 
-At this stage you can download our [contact flow that we create](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/call_flow.json). This is the file that you'll have to edit, and replace some ARNs of the lambda functions to your owns. Sadly there isn't an automatic way of doing this. You can find the ARNs in the output section of the deployed stack in CloudFormation.
+At this stage, you can download our [contact flow that we create](https://raw.githubusercontent.com/0x4447/0x4447_product_answering_machine/assets/call_flow.json). This is the file that you'll have to edit, replacing some ARNs of the Lambda functions with your own. Sadly, there's no automatic way to do this. You can find the Lambda ARNs in the output section of the deployed stack in CloudFormation.
 
-Once the file is changed you can import the flow: at the top right corner you have the `Save` button, which has an arrow pointing down. Click on it and select `Import flow (beta)`. Select the file, and upload it. Once the flow will show up on the page, **don't forget** to click `Publish`. At this stage we have to attach the flow we made with a phone number. To do so, follow this steps:
+Once you change the file, you can import the flow. At the top right corner is the `Save` button, which has a downward-pointing arrow. Click on it and select `Import flow (beta)`. Select the file and upload it. Once the flow shows up on the page, **don't forget** to click `Publish`. At this point, we have to attach the flow we made with a phone number. To do so, follow these steps:
 
-1. From the left menu list, select the 3th icon, and and click `Phone numbers`.
-1. Click `Claim a number` that you can find on the right side of the page.
-1. On the new page, select the Country
-1. From the list of numbers, select one that you like the most.
-1. Add a simple `Description`
-1. From the `Contact flow / IVR` drop down, select the flow that you created.
+1. Select the  third icon on the left menu list and click `Phone numbers`.
+1. Click `Claim a number` on the right side of the page.
+1. Select the country on the new page.
+1. Select the number you like best from the list of numbers.
+1. Add a simple `Description`.
+1. Select the flow you created from the `Contact flow/IVR` drop-down.
 1. Click `Save`.
 
 # Pricing
 
-All resources deployed via this stack will potentially cost you money. But you'd have to do the following for this to happen:
+All resources deployed via this stack will potentially cost you money, but you'd have to do the following for this to happen:
 
-- Invoke Lambdas over 1,000,000 times a month
-- Send over 1000 SNS emails a month
-- Send over 1 GB of data a month through SNS
+- Invoke Lambdas over 1,000,000 times per month
+- Send over 1000 SNS emails per month
+- Send over 1 GB of data per month through SNS
 - Exceed 100 build minutes on CodeBuild
+- Exceed the read and write capacity of DynamoDB
 - $1 per active CodePipeline (must run at least once a month to be considered active)
 
-The only payment you'll encounter from Day One is with Connect, since they bill per minutes of use, check their [pricing](https://aws.amazon.com/connect/pricing/) page to get an idea of costs.
+The only payment you'll encounter from Day One is with Connect, since they bill per minutes of use. Check their [pricing](https://aws.amazon.com/connect/pricing/) page to get an idea of the cost.
 
 # How to work with this project
 
